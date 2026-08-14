@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)file:///C:/Users/user/Downloads/Metida.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Метида">
+<meta name="theme-color" content="#1F4E5C">
+<title>Метида — управление проектом</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjM4IiBmaWxsPSIjMUY0RTVDIi8+PHRleHQgeD0iOTAiIHk9IjExOCIgZm9udC1zaXplPSI4NCIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+PC9zdmc+">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --primary: #1F4E5C;
+  --primary-light: #2d6a7a;
+  --accent: #C97F4A;
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-2: #666;
+  --text-3: #999;
+  --border: #E8E8ED;
+  --border-strong: #D0D0D5;
+  --success: #2E7D32;
+  --success-bg: #E8F5E9;
+  --danger: #C62828;
+  --danger-bg: #FFEBEE;
+  --warn: #E65100;
+  --warn-bg: #FFF3E0;
+  --safe-top: env(safe-area-inset-top, 0);
+  --safe-bottom: env(safe-area-inset-bottom, 0);
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+#app { height: 100%; display: flex; flex-direction: column; }
+.header {
+  background: var(--primary);
+  color: white;
+  padding-top: calc(var(--safe-top) + 8px);
+  padding-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  z-index: 100;
+  flex-shrink: 0;
+}
+.header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.header-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.header-btn:active { background: rgba(255,255,255,0.25); }
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 12px calc(80px + var(--safe-bottom));
+}
+.tabs {
+  display: flex;
+  background: white;
+  border-top: 0.5px solid var(--border);
+  padding-bottom: var(--safe-bottom);
+  flex-shrink: 0;
+  box-shadow: 0 -1px 3px rgba(0,0,0,0.04);
+}
+.tab {
+  flex: 1;
+  padding: 8px 4px 6px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-3);
+  font-size: 10px;
+  font-weight: 500;
+  border: none;
+  background: none;
+}
+.tab.active { color: var(--primary); }
+.tab-icon { font-size: 22px; display: block; margin-bottom: 2px; line-height: 1; }
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  border: 0.5px solid var(--border);
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--text);
+  line-height: 1.3;
+}
+.card-sub { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+.section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 8px 4px 8px;
+  letter-spacing: 0.03em;
+}
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(78px + var(--safe-bottom));
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-size: 26px;
+  font-weight: 300;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(31, 78, 92, 0.35);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fab:active { transform: scale(0.94); }
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1000;
+  display: none;
+  align-items: flex-end;
+}
+.modal-overlay.show { display: flex; }
+.modal {
+  background: var(--bg);
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 16px 16px calc(20px + var(--safe-bottom));
+  animation: slideUp 0.25s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 0.5px solid var(--border);
+}
+.modal-title { font-size: 17px; font-weight: 600; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: var(--text-2);
+  cursor: pointer;
+  padding: 4px 8px;
+}
+.form-group { margin-bottom: 14px; }
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.form-input, .form-select, .form-textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  font-size: 15px;
+  background: white;
+  color: var(--text);
+  font-family: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+.form-textarea { resize: vertical; min-height: 70px; font-family: inherit; }
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  width: 100%;
+}
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:active { background: var(--primary-light); }
+.btn-secondary { background: white; color: var(--primary); border: 1px solid var(--primary); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); }
+.btn-ghost { background: none; color: var(--text-2); }
+.btn-row { display: flex; gap: 8px; margin-top: 16px; }
+.btn-row .btn { flex: 1; }
+.empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-3);
+}
+.empty-icon { font-size: 44px; margin-bottom: 10px; opacity: 0.4; }
+.empty-text { font-size: 14px; }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.badge.success { background: var(--success-bg); color: var(--success); }
+.badge.danger { background: var(--danger-bg); color: var(--danger); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+.badge.info { background: #E8F0FE; color: #1a56c4; }
+.row-flex { display: flex; align-items: center; gap: 8px; }
+.row-flex > .flex1 { flex: 1; }
+.amount {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.amount.pos { color: var(--success); }
+.amount.neg { color: var(--danger); }
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  background: #f0f0f5;
+  color: var(--text-2);
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+.tag.primary { background: var(--primary); color: white; }
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.summary-card {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 14px;
+  border: 0.5px solid var(--border);
+}
+.summary-label { font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 4px; }
+.summary-value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.summary-value.pos { color: var(--success); }
+.summary-value.neg { color: var(--danger); }
+.subtask {
+  padding: 8px 10px;
+  border-left: 2px solid var(--border-strong);
+  margin-left: 8px;
+  margin-top: 4px;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.subtask input[type=checkbox] { margin-top: 2px; }
+.subtask.done .subtask-text { text-decoration: line-through; color: var(--text-3); }
+.chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.chip {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  background: white;
+  border: 1px solid var(--border-strong);
+  color: var(--text-2);
+  cursor: pointer;
+}
+.chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 2px;
+}
+.cal-day-h {
+  background: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 6px 2px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.cal-day {
+  background: white;
+  min-height: 54px;
+  padding: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.cal-day.other-month { background: #fafafa; color: var(--text-3); }
+.cal-day.today { background: var(--success-bg); }
+.cal-day-num { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.cal-marker {
+  font-size: 8px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  margin-bottom: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cal-marker.trip { background: var(--warn-bg); color: var(--warn); }
+.cal-marker.task { background: #E8F0FE; color: #1a56c4; }
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+.priority-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+.priority-badge.high { background: #FFEBEE; color: #C62828; }
+.priority-badge.mid { background: #FFF3E0; color: #E65100; }
+.priority-badge.low { background: #E8F5E9; color: #2E7D32; }
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-2);
+  cursor: pointer;
+  padding: 6px 8px;
+  font-size: 14px;
+}
+.settings-item {
+  background: white;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+.settings-item:first-child { border-radius: 12px 12px 0 0; }
+.settings-item:last-child { border-radius: 0 0 12px 12px; border-bottom: none; }
+.settings-item:only-child { border-radius: 12px; }
+.settings-group {
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 0.5px solid var(--border);
+}
+.settings-label { font-size: 15px; }
+.settings-value { font-size: 13px; color: var(--text-2); }
+.pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+}
+.status-line {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-2);
+  margin-top: 6px;
+}
+.dot {
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-3);
+}
+.dot.g { background: var(--success); }
+.dot.r { background: var(--danger); }
+.dot.o { background: var(--warn); }
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.toast {
+  position: fixed;
+  bottom: calc(100px + var(--safe-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.85);
+  color: white;
+  padding: 10px 18px;
+  border-radius: 22px;
+  font-size: 13px;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="header">
+    <h1 id="page-title">Метида</h1>
+    <div id="header-actions"></div>
+  </header>
+  <main class="content" id="content">
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Доходы (мес.)</div>
+        <div class="summary-value pos">250&nbsp;000 ₽</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расходы (мес.)</div>
+        <div class="summary-value neg">0 ₽</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Прибыль (мес.)</div>
+        <div class="summary-value pos">250&nbsp;000 ₽</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Активных рейсов</div>
+        <div class="summary-value">1</div>
+      </div>
+    </div>
+
+    
+
+    
+      <div class="section-title">Скоро дедлайн (1)</div>
+      
+          <div class="card" onclick="openTaskDetail(&#39;mssrx60xn57oqo&#39;)">
+            <div class="row-flex">
+              <div class="flex1">
+                <div class="card-title">Провести диагностику транспорта</div>
+                <div class="card-sub">
+                  <span class="badge info">
+                    Через 3 дн.
+                  </span>
+                   · Сделка
+                </div>
+              </div>
+            </div>
+          </div>
+        
+    
+
+    
+      <div class="section-title">Активные рейсы</div>
+      
+    <div class="card" onclick="openTripDetail(&#39;mssrx60xdlxosd&#39;)">
+      <div class="row-flex" style="margin-bottom:6px">
+        <span class="pill">Рейс №1</span>
+        <span class="badge warn">В пути</span>
+        <span class="tag">Тягач А723ВС92</span>
+      </div>
+      <div class="card-title">Севастополь → Йошкар-Ола</div>
+      <div class="card-sub">
+        Загрузка: 13 авг. 2026 г. · Выезд: 14 авг. 2026 г.
+        
+      </div>
+      <div class="row-flex" style="margin-top:8px">
+        <div class="flex1">
+          <div style="font-size:11px;color:var(--text-2)">Выручка / Расходы / Прибыль</div>
+          <div style="font-size:13px;font-variant-numeric:tabular-nums">
+            250&nbsp;000 ₽ / 0 ₽ /
+            <span class="amount pos" style="font-size:13px">250&nbsp;000 ₽</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    
+
+    <div class="section-title">Активность последних дней</div>
+    
+      
+    
+  </main>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard"><span class="tab-icon">◉</span>Обзор</button>
+    <button class="tab" data-tab="trips"><span class="tab-icon">▶</span>Рейсы</button>
+    <button class="tab" data-tab="calendar"><span class="tab-icon">▦</span>Календарь</button>
+    <button class="tab" data-tab="expenses"><span class="tab-icon">₽</span>Расходы</button>
+    <button class="tab" data-tab="tasks"><span class="tab-icon">✓</span>Задачи</button>
+    <button class="tab" data-tab="settings"><span class="tab-icon">☰</span>Ещё</button>
+  </nav>
+</div>
+<div class="modal-overlay" id="modal"></div>
+<div class="toast" id="toast"></div>
+<script>
+// ============ ДАННЫЕ ============
+const STORAGE_KEY = 'metida_app_v1';
+
+const DEFAULT_STATE = {
+  version: 1,
+  vehicles: [
+    { id: 'v1', name: 'Тягач Renault Magnum', reg: 'А723ВС92', vin: 'VF611GTA0E0017221', sts: '99 01 № 655510', year: '2000', type: 'truck', driver: null, active: true, note: '' },
+    { id: 'v2', name: 'Полуприцеп LAG S339', reg: 'Е849ОО77', vin: 'YB4A0053390007402', sts: '99 01 № 655508', year: '2000', type: 'trailer', driver: null, active: true, note: '' },
+    { id: 'v3', name: 'ГАЗ 33021', reg: 'А722ВС92', vin: 'Y7D330210V1002528', sts: '99 01 № 655509', year: '1998', type: 'van', driver: null, active: true, note: '' },
+  ],
+  drivers: [
+    { id: 'd1', name: 'Водитель 1 (фура)', phone: '', note: '' },
+    { id: 'd2', name: 'Водитель 2 (фура)', phone: '', note: '' },
+    { id: 'd3', name: 'Водитель Газели', phone: '', note: '' },
+  ],
+  paymentSources: ['Транзитный счёт ООО', 'Основной счёт ООО', 'Наличные (касса)', 'Личные средства (Ксенофонтов)', 'Карта'],
+  paymentMethods: ['Безнал', 'Наличные', 'СБП', 'Карта'],
+  expenseCategories: ['Топливо', 'Зарплата водителя', 'Платные дороги', 'Стоянки', 'Суточные', 'Ремонт/запчасти', 'Диспетчер', 'Налоги', 'Лизинг', 'Страховка', 'Зарплата бухгалтера', 'Аренда', 'Транш продавцу', 'Прочее'],
+  paidByOptions: ['Ксенофонтов М.А.', 'Водитель 1', 'Водитель 2', 'Водитель Газели', 'Бухгалтер', 'Директор'],
+  trips: [],
+  expenses: [],
+  tasks: [],
+  settings: { currency: '₽' }
+};
+
+let state = null;
+let currentTab = 'dashboard';
+let currentView = null;
+let calendarMonth = new Date();
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      state = JSON.parse(raw);
+      // migrate: ensure all arrays exist
+      if (!state.vehicles) state.vehicles = DEFAULT_STATE.vehicles;
+      if (!state.drivers) state.drivers = DEFAULT_STATE.drivers;
+      if (!state.paymentSources) state.paymentSources = DEFAULT_STATE.paymentSources;
+      if (!state.paymentMethods) state.paymentMethods = DEFAULT_STATE.paymentMethods;
+      if (!state.expenseCategories) state.expenseCategories = DEFAULT_STATE.expenseCategories;
+      if (!state.paidByOptions) state.paidByOptions = DEFAULT_STATE.paidByOptions;
+      if (!state.trips) state.trips = [];
+      if (!state.expenses) state.expenses = [];
+      if (!state.tasks) state.tasks = [];
+      if (!state.settings) state.settings = DEFAULT_STATE.settings;
+    } else {
+      state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+      seedDemoData();
+      saveState();
+    }
+  } catch (e) {
+    console.error('Load error:', e);
+    state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  }
+}
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  catch (e) { toast('Ошибка сохранения: ' + e.message); }
+}
+
+function seedDemoData() {
+  // Seed with tasks from the deal contract
+  const now = Date.now();
+  const dayMs = 86400000;
+  state.tasks = [
+    { id: uid(), title: 'Открыть Транзитный счёт ООО', category: 'Сделка', priority: 'high', done: false, due: new Date(now + 5*dayMs).toISOString().slice(0,10), note: 'В течение 5 рабочих дней с даты подписания Соглашения (п. 2.6)', subtasks: [] },
+    { id: uid(), title: 'Получить доступ «Менеджер» к интернет-банку', category: 'Сделка', priority: 'high', done: false, due: new Date(now + 10*dayMs).toISOString().slice(0,10), note: 'В течение 5 рабочих дней с даты открытия Транзитного счёта (п. 2.6.1)', subtasks: [] },
+    { id: uid(), title: 'Провести диагностику транспорта', category: 'Сделка', priority: 'high', done: false, due: new Date(now + 3*dayMs).toISOString().slice(0,10), note: 'Совместно с продавцом, заполнить Акт диагностики (Приложение №4)', subtasks: [
+      { id: uid(), text: 'Тягач Renault Magnum', done: false },
+      { id: uid(), text: 'Полуприцеп LAG S339', done: false },
+      { id: uid(), text: 'ГАЗ 33021', done: false }
+    ]},
+    { id: uid(), title: 'Погасить задолженности за 3 квартал', category: 'Сделка', priority: 'high', done: false, due: '2026-09-01', note: 'Обязательство Продавца по п. 3.1 — до 01.09.2026', subtasks: [
+      { id: uid(), text: 'Арендные платежи', done: false },
+      { id: uid(), text: 'Зарплаты и отпускные', done: false },
+      { id: uid(), text: 'Налоги и страховые взносы', done: false }
+    ]},
+    { id: uid(), title: 'Подписать доп. соглашение с АО «НПОТЭЛ»', category: 'Сделка', priority: 'mid', done: false, due: null, note: 'На условиях Приложения №2 (п. 3.5)', subtasks: [] },
+    { id: uid(), title: 'Оформить стоянку у НПОТЭЛ', category: 'Сделка', priority: 'mid', done: false, due: null, note: 'Гарантийное письмо или допсоглашение (п. 3.6)', subtasks: [] },
+    { id: uid(), title: 'Ремонт: замена лобового стекла Renault', category: 'Ремонт', priority: 'mid', done: false, due: null, note: 'п. 3.2 (б) — обязательство Продавца', subtasks: [] },
+    { id: uid(), title: 'Ремонт: втулки суппорта и колодки прицепа', category: 'Ремонт', priority: 'mid', done: false, due: null, note: 'п. 3.2 (а) — обязательство Продавца', subtasks: [] },
+    { id: uid(), title: 'Ремонт: доп. топливный бак 500л на тягач', category: 'Ремонт', priority: 'mid', done: false, due: null, note: 'п. 3.2 (в) — обязательство Продавца', subtasks: [] },
+    { id: uid(), title: 'Подать заявку на лизинг второй машины', category: 'Лизинг', priority: 'high', done: false, due: null, note: 'п. 3.7 — от имени ООО «Метида»', subtasks: [
+      { id: uid(), text: 'Собрать документы для лизинговой компании', done: false },
+      { id: uid(), text: 'Подать заявку', done: false },
+      { id: uid(), text: 'Дождаться одобрения / отказа', done: false }
+    ]},
+  ];
+  // Seed one demo trip
+  state.trips.push({
+    id: uid(),
+    number: 1,
+    vehicleId: 'v1',
+    driverId: 'd1',
+    departureDate: new Date().toISOString().slice(0,10),
+    loadDate: new Date(Date.now() - dayMs).toISOString().slice(0,10),
+    arrivalDate: null,
+    returnDate: null,
+    routeTo: 'Севастополь → Йошкар-Ола',
+    routeBack: 'Йошкар-Ола → Севастополь',
+    cargoTo: 'Груз АО «НПОТЭЛ»',
+    cargoBack: '',
+    rateTo: 250000,
+    rateBack: 0,
+    status: 'in_progress',
+    note: 'Первый рейс по Соглашению',
+  });
+}
+
+// ============ УТИЛИТЫ ============
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function fmtMoney(v) {
+  if (v == null || v === '') return '0 ₽';
+  return new Intl.NumberFormat('ru-RU').format(Math.round(v)) + ' ₽';
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function fmtDateShort(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+}
+function daysUntil(iso) {
+  if (!iso) return null;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(iso); target.setHours(0,0,0,0);
+  return Math.round((target - now) / 86400000);
+}
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+function confirmDialog(msg) { return confirm(msg); }
+
+// ============ MODAL ============
+function openModal(title, content, actions) {
+  const overlay = document.getElementById('modal');
+  overlay.innerHTML = `
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">${esc(title)}</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modal-body">${content}</div>
+      ${actions ? `<div class="btn-row">${actions}</div>` : ''}
+    </div>`;
+  overlay.classList.add('show');
+  overlay.onclick = closeModal;
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  const overlay = document.getElementById('modal');
+  overlay.classList.remove('show');
+  overlay.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+// ============ ОБЗОР ============
+function renderDashboard() {
+  const activeTrips = state.trips.filter(t => t.status === 'in_progress');
+  const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+  const monthExpenses = state.expenses.filter(e => new Date(e.date) >= monthStart);
+  const monthTotal = monthExpenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const monthRevenue = state.trips
+    .filter(t => new Date(t.departureDate || t.loadDate || 0) >= monthStart)
+    .reduce((s, t) => s + Number(t.rateTo || 0) + Number(t.rateBack || 0), 0);
+
+  const openTasks = state.tasks.filter(t => !t.done);
+  const overdueTasks = openTasks.filter(t => t.due && daysUntil(t.due) < 0);
+  const dueSoonTasks = openTasks.filter(t => t.due && daysUntil(t.due) >= 0 && daysUntil(t.due) <= 3);
+
+  document.getElementById('page-title').textContent = 'Метида';
+  document.getElementById('header-actions').innerHTML = '';
+
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Доходы (мес.)</div>
+        <div class="summary-value pos">${fmtMoney(monthRevenue)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расходы (мес.)</div>
+        <div class="summary-value neg">${fmtMoney(monthTotal)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Прибыль (мес.)</div>
+        <div class="summary-value ${monthRevenue - monthTotal >= 0 ? 'pos' : 'neg'}">${fmtMoney(monthRevenue - monthTotal)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Активных рейсов</div>
+        <div class="summary-value">${activeTrips.length}</div>
+      </div>
+    </div>
+
+    ${overdueTasks.length > 0 ? `
+      <div class="section-title">⚠ Просрочено (${overdueTasks.length})</div>
+      ${overdueTasks.slice(0, 3).map(t => `
+        <div class="card" onclick="openTaskDetail('${t.id}')">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title">${esc(t.title)}</div>
+              <div class="card-sub"><span class="badge danger">Просрочено на ${Math.abs(daysUntil(t.due))} дн.</span></div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    ` : ''}
+
+    ${dueSoonTasks.length > 0 ? `
+      <div class="section-title">Скоро дедлайн (${dueSoonTasks.length})</div>
+      ${dueSoonTasks.slice(0, 4).map(t => {
+        const d = daysUntil(t.due);
+        return `
+          <div class="card" onclick="openTaskDetail('${t.id}')">
+            <div class="row-flex">
+              <div class="flex1">
+                <div class="card-title">${esc(t.title)}</div>
+                <div class="card-sub">
+                  <span class="badge ${d === 0 ? 'danger' : (d <= 1 ? 'warn' : 'info')}">
+                    ${d === 0 ? 'Сегодня' : d === 1 ? 'Завтра' : 'Через ' + d + ' дн.'}
+                  </span>
+                  ${t.category ? ' · ' + esc(t.category) : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    ` : ''}
+
+    ${activeTrips.length > 0 ? `
+      <div class="section-title">Активные рейсы</div>
+      ${activeTrips.map(t => renderTripCard(t)).join('')}
+    ` : ''}
+
+    <div class="section-title">Активность последних дней</div>
+    ${state.expenses.length === 0 && state.trips.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">✎</div>
+        <div class="empty-text">Начните добавлять рейсы и расходы —<br>сводка появится здесь</div>
+      </div>
+    ` : `
+      ${[...state.expenses].sort((a,b) => (b.date || '').localeCompare(a.date || '')).slice(0, 5).map(e => `
+        <div class="card" onclick="openExpenseDetail('${e.id}')">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title">${esc(e.category)}</div>
+              <div class="card-sub">${fmtDateShort(e.date)} · ${esc(e.source)}${e.note ? ' · ' + esc(e.note.slice(0, 40)) : ''}</div>
+            </div>
+            <div class="amount neg">−${fmtMoney(e.amount)}</div>
+          </div>
+        </div>
+      `).join('')}
+    `}
+  `;
+}
+
+function renderTripCard(t) {
+  const vehicle = state.vehicles.find(v => v.id === t.vehicleId);
+  const tripExpenses = state.expenses.filter(e => e.tripId === t.id);
+  const totalExp = tripExpenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const revenue = Number(t.rateTo || 0) + Number(t.rateBack || 0);
+  const profit = revenue - totalExp;
+  const statusMap = {
+    planned: { text: 'Запланирован', cls: 'info' },
+    in_progress: { text: 'В пути', cls: 'warn' },
+    completed: { text: 'Завершён', cls: 'success' }
+  };
+  const st = statusMap[t.status] || statusMap.planned;
+  return `
+    <div class="card" onclick="openTripDetail('${t.id}')">
+      <div class="row-flex" style="margin-bottom:6px">
+        <span class="pill">Рейс №${t.number}</span>
+        <span class="badge ${st.cls}">${st.text}</span>
+        ${vehicle ? `<span class="tag">${esc(vehicle.name.split(' ')[0])} ${esc(vehicle.reg)}</span>` : ''}
+      </div>
+      <div class="card-title">${esc(t.routeTo || '—')}</div>
+      <div class="card-sub">
+        Загрузка: ${fmtDate(t.loadDate)} · Выезд: ${fmtDate(t.departureDate)}
+        ${t.arrivalDate ? ' · Прибытие: ' + fmtDate(t.arrivalDate) : ''}
+      </div>
+      <div class="row-flex" style="margin-top:8px">
+        <div class="flex1">
+          <div style="font-size:11px;color:var(--text-2)">Выручка / Расходы / Прибыль</div>
+          <div style="font-size:13px;font-variant-numeric:tabular-nums">
+            ${fmtMoney(revenue)} / ${fmtMoney(totalExp)} /
+            <span class="${profit >= 0 ? 'amount pos' : 'amount neg'}" style="font-size:13px">${fmtMoney(profit)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ РЕЙСЫ ============
+function renderTrips() {
+  document.getElementById('page-title').textContent = 'Рейсы';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  if (state.trips.length === 0) {
+    c.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">▶</div>
+        <div class="empty-text">Нет рейсов<br><br>Нажмите + чтобы добавить первый</div>
+      </div>
+      <button class="fab" onclick="openTripForm()">+</button>
+    `;
+    return;
+  }
+
+  const groups = { in_progress: [], planned: [], completed: [] };
+  state.trips.forEach(t => (groups[t.status] || groups.planned).push(t));
+
+  c.innerHTML = `
+    ${groups.in_progress.length ? `<div class="section-title">В пути</div>${groups.in_progress.map(renderTripCard).join('')}` : ''}
+    ${groups.planned.length ? `<div class="section-title">Запланированные</div>${groups.planned.map(renderTripCard).join('')}` : ''}
+    ${groups.completed.length ? `<div class="section-title">Завершённые</div>${[...groups.completed].reverse().slice(0, 20).map(renderTripCard).join('')}` : ''}
+    <button class="fab" onclick="openTripForm()">+</button>
+  `;
+}
+
+function openTripForm(id) {
+  const trip = id ? state.trips.find(t => t.id === id) : null;
+  const nextNum = state.trips.length ? Math.max(...state.trips.map(t => t.number || 0)) + 1 : 1;
+
+  const vehiclesOpts = state.vehicles.filter(v => v.active && v.type !== 'trailer')
+    .map(v => `<option value="${v.id}" ${trip?.vehicleId === v.id ? 'selected' : ''}>${esc(v.name)} (${esc(v.reg)})</option>`).join('');
+  const driversOpts = state.drivers.map(d =>
+    `<option value="${d.id}" ${trip?.driverId === d.id ? 'selected' : ''}>${esc(d.name)}</option>`).join('');
+
+  openModal(trip ? `Рейс №${trip.number}` : 'Новый рейс', `
+    <form id="trip-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Номер рейса</label>
+        <input type="number" class="form-input" name="number" value="${trip?.number || nextNum}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Машина</label>
+        <select class="form-select" name="vehicleId">${vehiclesOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Водитель</label>
+        <select class="form-select" name="driverId">${driversOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Маршрут туда</label>
+        <input type="text" class="form-input" name="routeTo" value="${esc(trip?.routeTo || 'Севастополь → Йошкар-Ола')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Груз туда</label>
+        <input type="text" class="form-input" name="cargoTo" value="${esc(trip?.cargoTo || 'Груз АО «НПОТЭЛ»')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ставка туда (₽)</label>
+        <input type="number" class="form-input" name="rateTo" value="${trip?.rateTo || 250000}" step="1000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Маршрут обратно</label>
+        <input type="text" class="form-input" name="routeBack" value="${esc(trip?.routeBack || 'Йошкар-Ола → Севастополь')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Груз обратно</label>
+        <input type="text" class="form-input" name="cargoBack" value="${esc(trip?.cargoBack || '')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ставка обратно (₽)</label>
+        <input type="number" class="form-input" name="rateBack" value="${trip?.rateBack || 0}" step="1000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата загрузки</label>
+        <input type="date" class="form-input" name="loadDate" value="${trip?.loadDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата выезда</label>
+        <input type="date" class="form-input" name="departureDate" value="${trip?.departureDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата прибытия</label>
+        <input type="date" class="form-input" name="arrivalDate" value="${trip?.arrivalDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата возврата</label>
+        <input type="date" class="form-input" name="returnDate" value="${trip?.returnDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Статус</label>
+        <select class="form-select" name="status">
+          <option value="planned" ${trip?.status === 'planned' ? 'selected' : ''}>Запланирован</option>
+          <option value="in_progress" ${trip?.status === 'in_progress' || !trip ? 'selected' : ''}>В пути</option>
+          <option value="completed" ${trip?.status === 'completed' ? 'selected' : ''}>Завершён</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(trip?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${trip ? `<button class="btn btn-danger" onclick="deleteTrip('${trip.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveTrip('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function saveTrip(id) {
+  const f = document.getElementById('trip-form');
+  const data = {
+    number: Number(f.number.value),
+    vehicleId: f.vehicleId.value,
+    driverId: f.driverId.value,
+    routeTo: f.routeTo.value.trim(),
+    cargoTo: f.cargoTo.value.trim(),
+    rateTo: Number(f.rateTo.value) || 0,
+    routeBack: f.routeBack.value.trim(),
+    cargoBack: f.cargoBack.value.trim(),
+    rateBack: Number(f.rateBack.value) || 0,
+    loadDate: f.loadDate.value || null,
+    departureDate: f.departureDate.value || null,
+    arrivalDate: f.arrivalDate.value || null,
+    returnDate: f.returnDate.value || null,
+    status: f.status.value,
+    note: f.note.value.trim()
+  };
+  if (id) {
+    const i = state.trips.findIndex(t => t.id === id);
+    state.trips[i] = { ...state.trips[i], ...data };
+    toast('Рейс обновлён');
+  } else {
+    state.trips.push({ id: uid(), ...data });
+    toast('Рейс добавлен');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteTrip(id) {
+  if (!confirmDialog('Удалить рейс? Связанные расходы останутся.')) return;
+  state.trips = state.trips.filter(t => t.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function openTripDetail(id) {
+  const t = state.trips.find(x => x.id === id);
+  if (!t) return;
+  const vehicle = state.vehicles.find(v => v.id === t.vehicleId);
+  const driver = state.drivers.find(d => d.id === t.driverId);
+  const tripExpenses = state.expenses.filter(e => e.tripId === id).sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  const totalExp = tripExpenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const revenue = Number(t.rateTo || 0) + Number(t.rateBack || 0);
+  const profit = revenue - totalExp;
+
+  const body = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Выручка</div>
+        <div class="summary-value pos">${fmtMoney(revenue)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расходы</div>
+        <div class="summary-value neg">${fmtMoney(totalExp)}</div>
+      </div>
+      <div class="summary-card" style="grid-column: span 2">
+        <div class="summary-label">Прибыль</div>
+        <div class="summary-value ${profit >= 0 ? 'pos' : 'neg'}">${fmtMoney(profit)}</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">${esc(t.routeTo || '')}</div>
+      <div class="card-sub">Груз: ${esc(t.cargoTo || '—')} · Ставка: ${fmtMoney(t.rateTo)}</div>
+      ${t.routeBack ? `
+        <div class="divider"></div>
+        <div class="card-title" style="font-size:14px">Обратно: ${esc(t.routeBack)}</div>
+        <div class="card-sub">Груз: ${esc(t.cargoBack || '—')} · Ставка: ${fmtMoney(t.rateBack)}</div>
+      ` : ''}
+      <div class="divider"></div>
+      <div class="card-sub">
+        ${vehicle ? '<b>Машина:</b> ' + esc(vehicle.name) + ' (' + esc(vehicle.reg) + ')<br>' : ''}
+        ${driver ? '<b>Водитель:</b> ' + esc(driver.name) + '<br>' : ''}
+        <b>Загрузка:</b> ${fmtDate(t.loadDate)}<br>
+        <b>Выезд:</b> ${fmtDate(t.departureDate)}<br>
+        <b>Прибытие:</b> ${fmtDate(t.arrivalDate)}<br>
+        <b>Возврат:</b> ${fmtDate(t.returnDate)}
+      </div>
+      ${t.note ? `<div class="divider"></div><div class="card-sub">${esc(t.note)}</div>` : ''}
+    </div>
+
+    <div class="section-title">Расходы по рейсу (${tripExpenses.length})</div>
+    ${tripExpenses.length === 0 ? '<div class="empty" style="padding:20px"><div class="empty-text">Ещё нет расходов</div></div>' :
+      tripExpenses.map(e => `
+        <div class="card" onclick="closeModal(); setTimeout(() => openExpenseDetail('${e.id}'), 300)">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(e.category)}</div>
+              <div class="card-sub">${fmtDateShort(e.date)} · ${esc(e.source)}${e.paidBy ? ' · ' + esc(e.paidBy) : ''}</div>
+            </div>
+            <div class="amount neg" style="font-size:15px">−${fmtMoney(e.amount)}</div>
+          </div>
+        </div>
+      `).join('')
+    }
+    <button class="btn btn-secondary" onclick="closeModal(); setTimeout(() => openExpenseForm(null, '${id}'), 300)" style="margin-top:10px">+ Добавить расход к рейсу</button>
+  `;
+  openModal(`Рейс №${t.number}`, body, `
+    <button class="btn btn-secondary" onclick="openTripForm('${id}')">Редактировать</button>
+  `);
+}
+
+// ============ РАСХОДЫ ============
+let expenseFilter = 'all';
+
+function renderExpenses() {
+  document.getElementById('page-title').textContent = 'Расходы';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  const monthStart = new Date(); monthStart.setDate(1); monthStart.setHours(0,0,0,0);
+  let list = [...state.expenses].sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+
+  if (expenseFilter === 'month') list = list.filter(e => new Date(e.date) >= monthStart);
+
+  const monthTotal = state.expenses
+    .filter(e => new Date(e.date) >= monthStart)
+    .reduce((s, e) => s + Number(e.amount || 0), 0);
+
+  // Group by source for current month
+  const bySrc = {};
+  state.expenses.filter(e => new Date(e.date) >= monthStart).forEach(e => {
+    bySrc[e.source] = (bySrc[e.source] || 0) + Number(e.amount || 0);
+  });
+
+  c.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Всего за месяц</div>
+        <div class="summary-value neg">${fmtMoney(monthTotal)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Записей</div>
+        <div class="summary-value">${state.expenses.filter(e => new Date(e.date) >= monthStart).length}</div>
+      </div>
+    </div>
+
+    ${Object.keys(bySrc).length > 0 ? `
+      <div class="card">
+        <div class="card-title" style="font-size:13px;margin-bottom:8px">По источникам оплаты (месяц)</div>
+        ${Object.entries(bySrc).map(([src, amt]) => `
+          <div class="row-flex" style="padding:4px 0;font-size:13px">
+            <span class="flex1">${esc(src)}</span>
+            <span class="amount neg" style="font-size:13px">${fmtMoney(amt)}</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    <div class="chip-row">
+      <div class="chip ${expenseFilter === 'all' ? 'active' : ''}" onclick="expenseFilter='all'; render()">Все</div>
+      <div class="chip ${expenseFilter === 'month' ? 'active' : ''}" onclick="expenseFilter='month'; render()">За месяц</div>
+    </div>
+
+    ${list.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">₽</div>
+        <div class="empty-text">Расходов пока нет</div>
+      </div>
+    ` : list.map(e => {
+      const trip = e.tripId ? state.trips.find(t => t.id === e.tripId) : null;
+      return `
+        <div class="card" onclick="openExpenseDetail('${e.id}')">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(e.category)}</div>
+              <div class="card-sub">
+                ${fmtDateShort(e.date)} · ${esc(e.source)} · ${esc(e.method || '')}
+                ${trip ? ` · <span class="tag">Рейс №${trip.number}</span>` : ''}
+              </div>
+              ${e.note ? `<div class="card-sub" style="margin-top:4px">${esc(e.note)}</div>` : ''}
+            </div>
+            <div class="amount neg">−${fmtMoney(e.amount)}</div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+    <button class="fab" onclick="openExpenseForm()">+</button>
+  `;
+}
+
+function openExpenseForm(id, presetTripId) {
+  const exp = id ? state.expenses.find(e => e.id === id) : null;
+  const today = new Date().toISOString().slice(0,10);
+  const catOpts = state.expenseCategories.map(c => `<option value="${esc(c)}" ${exp?.category === c ? 'selected' : ''}>${esc(c)}</option>`).join('');
+  const srcOpts = state.paymentSources.map(s => `<option value="${esc(s)}" ${exp?.source === s ? 'selected' : ''}>${esc(s)}</option>`).join('');
+  const methodOpts = state.paymentMethods.map(m => `<option value="${esc(m)}" ${exp?.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('');
+  const paidByOpts = ['<option value="">— не указано —</option>', ...state.paidByOptions.map(p => `<option value="${esc(p)}" ${exp?.paidBy === p ? 'selected' : ''}>${esc(p)}</option>`)].join('');
+  const tripOpts = ['<option value="">— без рейса —</option>', ...state.trips.map(t => `<option value="${t.id}" ${(exp?.tripId || presetTripId) === t.id ? 'selected' : ''}>Рейс №${t.number}${t.routeTo ? ' · ' + esc(t.routeTo) : ''}</option>`)].join('');
+
+  openModal(exp ? 'Расход' : 'Новый расход', `
+    <form id="exp-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Сумма (₽)</label>
+        <input type="number" class="form-input" name="amount" value="${exp?.amount || ''}" step="0.01" required autofocus>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select class="form-select" name="category" required>${catOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Источник оплаты</label>
+        <select class="form-select" name="source" required>${srcOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Способ</label>
+        <select class="form-select" name="method">${methodOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Кем оплачено</label>
+        <select class="form-select" name="paidBy">${paidByOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Рейс (опционально)</label>
+        <select class="form-select" name="tripId">${tripOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата</label>
+        <input type="date" class="form-input" name="date" value="${exp?.date || today}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(exp?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${exp ? `<button class="btn btn-danger" onclick="deleteExpense('${exp.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveExpense('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function saveExpense(id) {
+  const f = document.getElementById('exp-form');
+  const data = {
+    amount: Number(f.amount.value),
+    category: f.category.value,
+    source: f.source.value,
+    method: f.method.value,
+    paidBy: f.paidBy.value,
+    tripId: f.tripId.value || null,
+    date: f.date.value,
+    note: f.note.value.trim()
+  };
+  if (!data.amount || data.amount <= 0) { toast('Введите сумму'); return; }
+  if (id) {
+    const i = state.expenses.findIndex(e => e.id === id);
+    state.expenses[i] = { ...state.expenses[i], ...data };
+    toast('Расход обновлён');
+  } else {
+    state.expenses.push({ id: uid(), ...data });
+    toast('Расход добавлен');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteExpense(id) {
+  if (!confirmDialog('Удалить расход?')) return;
+  state.expenses = state.expenses.filter(e => e.id !== id);
+  saveState(); closeModal(); render();
+}
+function openExpenseDetail(id) { openExpenseForm(id); }
+
+// ============ ЗАДАЧИ ============
+let taskFilter = 'open';
+
+function renderTasks() {
+  document.getElementById('page-title').textContent = 'Задачи';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  let list = [...state.tasks];
+  if (taskFilter === 'open') list = list.filter(t => !t.done);
+  if (taskFilter === 'done') list = list.filter(t => t.done);
+  // Sort: overdue → today → soon → future → no date
+  list.sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    const da = a.due ? daysUntil(a.due) : 9999;
+    const db = b.due ? daysUntil(b.due) : 9999;
+    return da - db;
+  });
+
+  const openCount = state.tasks.filter(t => !t.done).length;
+  const overdueCount = state.tasks.filter(t => !t.done && t.due && daysUntil(t.due) < 0).length;
+
+  c.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Активных</div>
+        <div class="summary-value">${openCount}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Просрочено</div>
+        <div class="summary-value ${overdueCount > 0 ? 'neg' : ''}">${overdueCount}</div>
+      </div>
+    </div>
+    <div class="chip-row">
+      <div class="chip ${taskFilter === 'open' ? 'active' : ''}" onclick="taskFilter='open'; render()">Открытые</div>
+      <div class="chip ${taskFilter === 'done' ? 'active' : ''}" onclick="taskFilter='done'; render()">Выполненные</div>
+      <div class="chip ${taskFilter === 'all' ? 'active' : ''}" onclick="taskFilter='all'; render()">Все</div>
+    </div>
+    ${list.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">✓</div>
+        <div class="empty-text">Задач нет</div>
+      </div>
+    ` : list.map(t => {
+      const days = t.due ? daysUntil(t.due) : null;
+      const dueBadge = t.due ? (
+        days < 0 ? `<span class="badge danger">Просрочено ${Math.abs(days)}д</span>` :
+        days === 0 ? `<span class="badge danger">Сегодня</span>` :
+        days === 1 ? `<span class="badge warn">Завтра</span>` :
+        days <= 7 ? `<span class="badge info">Через ${days}д</span>` :
+        `<span class="badge info">${fmtDateShort(t.due)}</span>`
+      ) : '';
+      const subDone = (t.subtasks || []).filter(s => s.done).length;
+      const subTotal = (t.subtasks || []).length;
+      return `
+        <div class="card" onclick="openTaskDetail('${t.id}')" style="${t.done ? 'opacity:0.55' : ''}">
+          <div class="row-flex">
+            <input type="checkbox" ${t.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleTask('${t.id}')" style="width:18px;height:18px;accent-color:var(--primary)">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px;${t.done ? 'text-decoration:line-through' : ''}">
+                ${t.priority ? `<span class="priority-badge ${t.priority}">${t.priority === 'high' ? '!' : t.priority === 'mid' ? '·' : '↓'}</span>` : ''}
+                ${esc(t.title)}
+              </div>
+              <div class="card-sub" style="margin-top:4px">
+                ${dueBadge}
+                ${t.category ? ` <span class="tag">${esc(t.category)}</span>` : ''}
+                ${subTotal > 0 ? ` <span class="tag">${subDone}/${subTotal}</span>` : ''}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+    <button class="fab" onclick="openTaskForm()">+</button>
+  `;
+}
+
+function toggleTask(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (t) { t.done = !t.done; saveState(); render(); }
+}
+
+function openTaskForm(id) {
+  const t = id ? state.tasks.find(x => x.id === id) : null;
+  openModal(t ? 'Задача' : 'Новая задача', `
+    <form id="task-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Название</label>
+        <input type="text" class="form-input" name="title" value="${esc(t?.title || '')}" required autofocus>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <input type="text" class="form-input" name="category" value="${esc(t?.category || '')}" placeholder="Например: Сделка, Ремонт, Лизинг">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Приоритет</label>
+        <select class="form-select" name="priority">
+          <option value="high" ${t?.priority === 'high' ? 'selected' : ''}>Высокий</option>
+          <option value="mid" ${t?.priority === 'mid' || !t ? 'selected' : ''}>Средний</option>
+          <option value="low" ${t?.priority === 'low' ? 'selected' : ''}>Низкий</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дедлайн (опционально)</label>
+        <input type="date" class="form-input" name="due" value="${t?.due || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(t?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${t ? `<button class="btn btn-danger" onclick="deleteTask('${t.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveTask('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function saveTask(id) {
+  const f = document.getElementById('task-form');
+  const data = {
+    title: f.title.value.trim(),
+    category: f.category.value.trim(),
+    priority: f.priority.value,
+    due: f.due.value || null,
+    note: f.note.value.trim()
+  };
+  if (!data.title) { toast('Введите название'); return; }
+  if (id) {
+    const i = state.tasks.findIndex(x => x.id === id);
+    state.tasks[i] = { ...state.tasks[i], ...data };
+    toast('Задача обновлена');
+  } else {
+    state.tasks.push({ id: uid(), ...data, done: false, subtasks: [] });
+    toast('Задача добавлена');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteTask(id) {
+  if (!confirmDialog('Удалить задачу?')) return;
+  state.tasks = state.tasks.filter(x => x.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function openTaskDetail(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  const days = t.due ? daysUntil(t.due) : null;
+  const dueLine = t.due ? (
+    days < 0 ? `<span class="badge danger">Просрочено на ${Math.abs(days)} дн.</span>` :
+    days === 0 ? `<span class="badge danger">Сегодня</span>` :
+    days === 1 ? `<span class="badge warn">Завтра</span>` :
+    `<span class="badge info">Через ${days} дн. (${fmtDate(t.due)})</span>`
+  ) : '<span class="tag">Без дедлайна</span>';
+
+  const body = `
+    <div class="card">
+      <div class="card-title" style="${t.done ? 'text-decoration:line-through;color:var(--text-3)' : ''}">
+        ${t.priority ? `<span class="priority-badge ${t.priority}">${t.priority === 'high' ? 'ВЫСОК.' : t.priority === 'mid' ? 'СРЕД.' : 'НИЗК.'}</span>` : ''}
+        ${esc(t.title)}
+      </div>
+      <div class="card-sub" style="margin-top:6px">
+        ${dueLine}
+        ${t.category ? ` <span class="tag">${esc(t.category)}</span>` : ''}
+      </div>
+      ${t.note ? `<div class="divider"></div><div class="card-sub" style="white-space:pre-wrap">${esc(t.note)}</div>` : ''}
+    </div>
+
+    <div class="section-title">Подзадачи (${(t.subtasks || []).filter(s => s.done).length}/${(t.subtasks || []).length})</div>
+    <div class="card">
+      ${(t.subtasks || []).map(s => `
+        <div class="subtask ${s.done ? 'done' : ''}">
+          <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSubtask('${id}', '${s.id}')">
+          <span class="subtask-text flex1">${esc(s.text)}</span>
+          <button class="icon-btn" onclick="deleteSubtask('${id}', '${s.id}')">✕</button>
+        </div>
+      `).join('')}
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <input type="text" id="new-sub" class="form-input" placeholder="Новая подзадача" style="flex:1;padding:8px 10px;font-size:13px">
+        <button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="addSubtask('${id}')">+</button>
+      </div>
+    </div>
+
+    <button class="btn ${t.done ? 'btn-secondary' : 'btn-primary'}" style="margin-top:12px" onclick="toggleTask('${id}'); closeModal()">
+      ${t.done ? 'Вернуть в работу' : 'Отметить выполненной'}
+    </button>
+  `;
+  openModal('Задача', body, `<button class="btn btn-secondary" onclick="openTaskForm('${id}')">Редактировать</button>`);
+}
+
+function toggleSubtask(taskId, subId) {
+  const t = state.tasks.find(x => x.id === taskId);
+  const s = t?.subtasks?.find(x => x.id === subId);
+  if (s) { s.done = !s.done; saveState(); openTaskDetail(taskId); }
+}
+function deleteSubtask(taskId, subId) {
+  const t = state.tasks.find(x => x.id === taskId);
+  if (t) { t.subtasks = t.subtasks.filter(x => x.id !== subId); saveState(); openTaskDetail(taskId); }
+}
+function addSubtask(taskId) {
+  const input = document.getElementById('new-sub');
+  const text = input.value.trim();
+  if (!text) return;
+  const t = state.tasks.find(x => x.id === taskId);
+  if (!t.subtasks) t.subtasks = [];
+  t.subtasks.push({ id: uid(), text, done: false });
+  saveState();
+  openTaskDetail(taskId);
+}
+
+// ============ КАЛЕНДАРЬ ============
+function renderCalendar() {
+  document.getElementById('page-title').textContent = 'Календарь';
+  document.getElementById('header-actions').innerHTML = `
+    <button class="header-btn" onclick="calMonth(-1)">‹</button>
+    <button class="header-btn" onclick="calMonth(1)" style="margin-left:6px">›</button>
+  `;
+  const c = document.getElementById('content');
+
+  const year = calendarMonth.getFullYear();
+  const month = calendarMonth.getMonth();
+  const monthName = calendarMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+
+  // Build calendar grid (Mon-Sun)
+  const firstDay = new Date(year, month, 1);
+  const startOffset = (firstDay.getDay() + 6) % 7; // Mon=0
+  const start = new Date(year, month, 1 - startOffset);
+
+  const days = [];
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start);
+    d.setDate(start.getDate() + i);
+    days.push(d);
+  }
+
+  const today = new Date(); today.setHours(0,0,0,0);
+  const isoDay = d => d.toISOString().slice(0, 10);
+
+  // Events per day
+  function eventsForDay(d) {
+    const iso = isoDay(d);
+    const events = [];
+    state.trips.forEach(t => {
+      if (t.loadDate === iso) events.push({ type: 'trip', text: `▷ Рейс №${t.number} загрузка`, id: t.id });
+      if (t.departureDate === iso) events.push({ type: 'trip', text: `→ Рейс №${t.number} выезд`, id: t.id });
+      if (t.arrivalDate === iso) events.push({ type: 'trip', text: `↓ Рейс №${t.number} прибытие`, id: t.id });
+      if (t.returnDate === iso) events.push({ type: 'trip', text: `← Рейс №${t.number} возврат`, id: t.id });
+    });
+    state.tasks.filter(t => !t.done && t.due === iso).forEach(t => {
+      events.push({ type: 'task', text: `✓ ${t.title}`, id: t.id });
+    });
+    return events;
+  }
+
+  c.innerHTML = `
+    <div class="card" style="text-align:center;font-weight:600;text-transform:capitalize">${monthName}</div>
+    <div class="cal-grid">
+      ${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d => `<div class="cal-day-h">${d}</div>`).join('')}
+      ${days.map(d => {
+        const events = eventsForDay(d);
+        const isToday = d.getTime() === today.getTime();
+        const isOther = d.getMonth() !== month;
+        return `
+          <div class="cal-day ${isOther ? 'other-month' : ''} ${isToday ? 'today' : ''}" onclick="showDayEvents('${isoDay(d)}')">
+            <div class="cal-day-num">${d.getDate()}</div>
+            ${events.slice(0, 3).map(e => `<div class="cal-marker ${e.type}">${esc(e.text)}</div>`).join('')}
+            ${events.length > 3 ? `<div class="cal-marker" style="background:#eee;color:#666">+${events.length - 3}</div>` : ''}
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="section-title">Ближайшие события</div>
+    ${(() => {
+      const upcoming = [];
+      state.trips.forEach(t => {
+        ['loadDate', 'departureDate', 'arrivalDate', 'returnDate'].forEach(k => {
+          if (t[k] && new Date(t[k]) >= today) {
+            const labels = { loadDate: 'Загрузка', departureDate: 'Выезд', arrivalDate: 'Прибытие', returnDate: 'Возврат' };
+            upcoming.push({ date: t[k], title: `${labels[k]} — Рейс №${t.number}`, type: 'trip', id: t.id });
+          }
+        });
+      });
+      state.tasks.filter(t => !t.done && t.due && new Date(t.due) >= today).forEach(t => {
+        upcoming.push({ date: t.due, title: t.title, type: 'task', id: t.id });
+      });
+      upcoming.sort((a,b) => a.date.localeCompare(b.date));
+      if (upcoming.length === 0) return '<div class="empty" style="padding:20px"><div class="empty-text">Нет ближайших событий</div></div>';
+      return upcoming.slice(0, 10).map(e => `
+        <div class="card" onclick="${e.type === 'trip' ? `openTripDetail('${e.id}')` : `openTaskDetail('${e.id}')`}">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(e.title)}</div>
+              <div class="card-sub">${fmtDate(e.date)}</div>
+            </div>
+            <span class="badge ${e.type === 'trip' ? 'warn' : 'info'}">${e.type === 'trip' ? 'Рейс' : 'Задача'}</span>
+          </div>
+        </div>
+      `).join('');
+    })()}
+  `;
+}
+
+function calMonth(delta) {
+  calendarMonth.setMonth(calendarMonth.getMonth() + delta);
+  render();
+}
+
+function showDayEvents(iso) {
+  const d = new Date(iso);
+  const events = [];
+  state.trips.forEach(t => {
+    if (t.loadDate === iso) events.push({ type: 'trip', text: `Загрузка — Рейс №${t.number}`, id: t.id });
+    if (t.departureDate === iso) events.push({ type: 'trip', text: `Выезд — Рейс №${t.number}`, id: t.id });
+    if (t.arrivalDate === iso) events.push({ type: 'trip', text: `Прибытие — Рейс №${t.number}`, id: t.id });
+    if (t.returnDate === iso) events.push({ type: 'trip', text: `Возврат — Рейс №${t.number}`, id: t.id });
+  });
+  state.tasks.filter(t => t.due === iso).forEach(t => {
+    events.push({ type: 'task', text: t.title, id: t.id, done: t.done });
+  });
+  if (events.length === 0) {
+    toast('На этот день событий нет');
+    return;
+  }
+  openModal(fmtDate(iso),
+    events.map(e => `
+      <div class="card" onclick="closeModal(); setTimeout(() => ${e.type === 'trip' ? `openTripDetail('${e.id}')` : `openTaskDetail('${e.id}')`}, 300)">
+        <div class="row-flex">
+          <span class="badge ${e.type === 'trip' ? 'warn' : 'info'}">${e.type === 'trip' ? 'Рейс' : 'Задача'}</span>
+          <span class="flex1">${esc(e.text)}${e.done ? ' <s style="color:#999">выполнено</s>' : ''}</span>
+        </div>
+      </div>
+    `).join('')
+  );
+}
+
+// ============ НАСТРОЙКИ ============
+function renderSettings() {
+  document.getElementById('page-title').textContent = 'Ещё';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="section-title">Данные</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="showVehicles()">
+        <span class="settings-label">Транспорт</span>
+        <span class="settings-value">${state.vehicles.length} шт. ›</span>
+      </div>
+      <div class="settings-item" onclick="showDrivers()">
+        <span class="settings-label">Водители</span>
+        <span class="settings-value">${state.drivers.length} чел. ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('paymentSources', 'Источники оплаты')">
+        <span class="settings-label">Источники оплаты</span>
+        <span class="settings-value">${state.paymentSources.length} ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('expenseCategories', 'Категории расходов')">
+        <span class="settings-label">Категории расходов</span>
+        <span class="settings-value">${state.expenseCategories.length} ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('paidByOptions', 'Кем оплачено — варианты')">
+        <span class="settings-label">Кем оплачено</span>
+        <span class="settings-value">${state.paidByOptions.length} ›</span>
+      </div>
+    </div>
+
+    <div class="section-title">Резервное копирование</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="exportJSON()">
+        <span class="settings-label">Экспорт (JSON) — полный бэкап</span>
+        <span class="settings-value">↓</span>
+      </div>
+      <div class="settings-item" onclick="exportCSV()">
+        <span class="settings-label">Экспорт расходов (CSV)</span>
+        <span class="settings-value">↓</span>
+      </div>
+      <div class="settings-item" onclick="document.getElementById('import-file').click()">
+        <span class="settings-label">Импорт (JSON)</span>
+        <span class="settings-value">↑</span>
+      </div>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+
+    <div class="section-title">Статистика</div>
+    <div class="card">
+      <div class="card-sub">
+        Рейсов: ${state.trips.length}<br>
+        Расходов: ${state.expenses.length}<br>
+        Задач: ${state.tasks.length} (открытых: ${state.tasks.filter(t => !t.done).length})<br>
+        Транспорта: ${state.vehicles.length}<br>
+        Водителей: ${state.drivers.length}
+      </div>
+    </div>
+
+    <div class="section-title" style="color:var(--danger)">Опасная зона</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="clearAllData()">
+        <span class="settings-label" style="color:var(--danger)">Удалить все данные</span>
+        <span class="settings-value">✕</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--text-3);font-size:11px;padding:20px 10px">
+      Метида · v1.0<br>
+      Для установки: Safari → Поделиться → «На экран Домой»
+    </div>
+  `;
+}
+
+function showVehicles() {
+  const body = state.vehicles.map(v => `
+    <div class="card" onclick="editVehicle('${v.id}')">
+      <div class="card-title">${esc(v.name)}</div>
+      <div class="card-sub">
+        Гос. номер: ${esc(v.reg)}<br>
+        ${v.driver ? 'Водитель: ' + esc(state.drivers.find(d => d.id === v.driver)?.name || '') + '<br>' : ''}
+        ${v.active ? '<span class="badge success">Активна</span>' : '<span class="badge">Неактивна</span>'}
+      </div>
+    </div>
+  `).join('');
+  openModal('Транспорт', body + '<button class="btn btn-secondary" style="margin-top:10px" onclick="editVehicle()">+ Добавить машину</button>');
+}
+
+function editVehicle(id) {
+  const v = id ? state.vehicles.find(x => x.id === id) : null;
+  const driverOpts = ['<option value="">— не назначен —</option>', ...state.drivers.map(d => `<option value="${d.id}" ${v?.driver === d.id ? 'selected' : ''}>${esc(d.name)}</option>`)].join('');
+  openModal(v ? 'Машина' : 'Новая машина', `
+    <form id="veh-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Название</label>
+        <input type="text" class="form-input" name="name" value="${esc(v?.name || '')}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Тип</label>
+        <select class="form-select" name="type">
+          <option value="truck" ${v?.type === 'truck' ? 'selected' : ''}>Тягач</option>
+          <option value="trailer" ${v?.type === 'trailer' ? 'selected' : ''}>Полуприцеп</option>
+          <option value="van" ${v?.type === 'van' ? 'selected' : ''}>Газель/фургон</option>
+          <option value="other" ${v?.type === 'other' ? 'selected' : ''}>Другое</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Гос. номер</label>
+        <input type="text" class="form-input" name="reg" value="${esc(v?.reg || '')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">VIN</label>
+        <input type="text" class="form-input" name="vin" value="${esc(v?.vin || '')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">СТС</label>
+        <input type="text" class="form-input" name="sts" value="${esc(v?.sts || '')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Год выпуска</label>
+        <input type="text" class="form-input" name="year" value="${esc(v?.year || '')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Водитель</label>
+        <select class="form-select" name="driver">${driverOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(v?.note || '')}</textarea>
+      </div>
+      <div class="form-group">
+        <label style="display:flex;align-items:center;gap:8px">
+          <input type="checkbox" name="active" ${!v || v.active ? 'checked' : ''}>
+          <span>Активна (используется в работе)</span>
+        </label>
+      </div>
+    </form>
+  `, `
+    ${v ? `<button class="btn btn-danger" onclick="deleteVehicle('${v.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveVehicle('${id || ''}')">Сохранить</button>
+  `);
+}
+function saveVehicle(id) {
+  const f = document.getElementById('veh-form');
+  const data = {
+    name: f.name.value.trim(),
+    type: f.type.value,
+    reg: f.reg.value.trim(),
+    vin: f.vin.value.trim(),
+    sts: f.sts.value.trim(),
+    year: f.year.value.trim(),
+    driver: f.driver.value || null,
+    note: f.note.value.trim(),
+    active: f.active.checked
+  };
+  if (!data.name) { toast('Введите название'); return; }
+  if (id) {
+    const i = state.vehicles.findIndex(v => v.id === id);
+    state.vehicles[i] = { ...state.vehicles[i], ...data };
+  } else {
+    state.vehicles.push({ id: uid(), ...data });
+  }
+  saveState(); closeModal(); toast('Сохранено'); render();
+}
+function deleteVehicle(id) {
+  if (!confirmDialog('Удалить машину?')) return;
+  state.vehicles = state.vehicles.filter(v => v.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function showDrivers() {
+  const body = state.drivers.map(d => `
+    <div class="card" onclick="editDriver('${d.id}')">
+      <div class="card-title">${esc(d.name)}</div>
+      ${d.phone ? `<div class="card-sub">${esc(d.phone)}</div>` : ''}
+      ${d.note ? `<div class="card-sub">${esc(d.note)}</div>` : ''}
+    </div>
+  `).join('');
+  openModal('Водители', body + '<button class="btn btn-secondary" style="margin-top:10px" onclick="editDriver()">+ Добавить водителя</button>');
+}
+function editDriver(id) {
+  const d = id ? state.drivers.find(x => x.id === id) : null;
+  openModal(d ? 'Водитель' : 'Новый водитель', `
+    <form id="drv-form" onsubmit="return false">
+      <div class="form-group"><label class="form-label">ФИО</label><input type="text" class="form-input" name="name" value="${esc(d?.name || '')}" required></div>
+      <div class="form-group"><label class="form-label">Телефон</label><input type="tel" class="form-input" name="phone" value="${esc(d?.phone || '')}"></div>
+      <div class="form-group"><label class="form-label">Заметка</label><textarea class="form-textarea" name="note">${esc(d?.note || '')}</textarea></div>
+    </form>
+  `, `
+    ${d ? `<button class="btn btn-danger" onclick="deleteDriver('${d.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveDriver('${id || ''}')">Сохранить</button>
+  `);
+}
+function saveDriver(id) {
+  const f = document.getElementById('drv-form');
+  const data = { name: f.name.value.trim(), phone: f.phone.value.trim(), note: f.note.value.trim() };
+  if (!data.name) { toast('Введите ФИО'); return; }
+  if (id) {
+    const i = state.drivers.findIndex(d => d.id === id);
+    state.drivers[i] = { ...state.drivers[i], ...data };
+  } else {
+    state.drivers.push({ id: uid(), ...data });
+  }
+  saveState(); closeModal(); toast('Сохранено'); render();
+}
+function deleteDriver(id) {
+  if (!confirmDialog('Удалить водителя?')) return;
+  state.drivers = state.drivers.filter(d => d.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function showListEditor(key, title) {
+  const list = state[key];
+  const body = `
+    <div id="list-editor">
+      ${list.map((item, idx) => `
+        <div class="card" style="padding:10px 12px">
+          <div class="row-flex">
+            <span class="flex1">${esc(item)}</span>
+            <button class="icon-btn" onclick="removeListItem('${key}', ${idx})">✕</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="display:flex;gap:6px;margin-top:12px">
+      <input type="text" id="new-list-item" class="form-input" placeholder="Новый пункт" style="flex:1">
+      <button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="addListItem('${key}')">+</button>
+    </div>
+  `;
+  openModal(title, body);
+}
+function addListItem(key) {
+  const input = document.getElementById('new-list-item');
+  const val = input.value.trim();
+  if (!val) return;
+  state[key].push(val);
+  saveState();
+  showListEditor(key, document.querySelector('.modal-title').textContent);
+}
+function removeListItem(key, idx) {
+  if (!confirmDialog('Удалить пункт?')) return;
+  state[key].splice(idx, 1);
+  saveState();
+  showListEditor(key, document.querySelector('.modal-title').textContent);
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `metida_backup_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Бэкап скачан');
+}
+function exportCSV() {
+  const rows = [
+    ['Дата', 'Сумма', 'Категория', 'Источник', 'Способ', 'Кем оплачено', 'Рейс', 'Заметка']
+  ];
+  state.expenses.forEach(e => {
+    const trip = e.tripId ? state.trips.find(t => t.id === e.tripId) : null;
+    rows.push([
+      e.date || '', e.amount || '', e.category || '', e.source || '',
+      e.method || '', e.paidBy || '', trip ? `Рейс №${trip.number}` : '', (e.note || '').replace(/[\r\n]+/g, ' ')
+    ]);
+  });
+  const csv = '\uFEFF' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `metida_expenses_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('CSV скачан');
+}
+function importJSON(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  if (!confirmDialog('Импорт заменит все текущие данные. Продолжить?')) { ev.target.value = ''; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      state = imported;
+      saveState();
+      toast('Данные импортированы');
+      render();
+    } catch (err) {
+      toast('Ошибка импорта: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  ev.target.value = '';
+}
+function clearAllData() {
+  if (!confirmDialog('УДАЛИТЬ ВСЕ ДАННЫЕ БЕЗ ВОЗМОЖНОСТИ ВОССТАНОВЛЕНИЯ?')) return;
+  if (!confirmDialog('Точно? Это действие необратимо. Убедитесь, что сделали бэкап.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  loadState();
+  render();
+  toast('Все данные удалены');
+}
+
+// ============ ROUTER ============
+function render() {
+  switch (currentTab) {
+    case 'dashboard': renderDashboard(); break;
+    case 'trips': renderTrips(); break;
+    case 'calendar': renderCalendar(); break;
+    case 'expenses': renderExpenses(); break;
+    case 'tasks': renderTasks(); break;
+    case 'settings': renderSettings(); break;
+  }
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    document.getElementById('content').scrollTop = 0;
+    render();
+  });
+});
+
+loadState();
+render();
+
+// Register service worker for offline (if supported)
+if ('serviceWorker' in navigator) {
+  // inline SW via blob
+  const swCode = `
+    self.addEventListener('install', e => self.skipWaiting());
+    self.addEventListener('activate', e => self.clients.claim());
+    self.addEventListener('fetch', e => {
+      // Only handle same-origin
+      if (e.request.url.startsWith(self.location.origin)) {
+        e.respondWith(fetch(e.request).catch(() => new Response('Offline', {status: 200})));
+      }
+    });
+  `;
+  try {
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    const swURL = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swURL).catch(() => {});
+  } catch (e) {}
+}
+
+</script>
+
+
+<g-ext-in></g-ext-in></body></html>
