@@ -1,0 +1,2428 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)file:///C:/Users/user/Downloads/Metida_1.html -->
+<html lang="ru"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Метида">
+<meta name="theme-color" content="#1F4E5C">
+<title>Метида — управление проектом</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxODAgMTgwIj48cmVjdCB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgcng9IjM4IiBmaWxsPSIjMUY0RTVDIi8+PHRleHQgeD0iOTAiIHk9IjExOCIgZm9udC1zaXplPSI4NCIgZm9udC13ZWlnaHQ9IjcwMCIgZm9udC1mYW1pbHk9Ii1hcHBsZS1zeXN0ZW0sIHNhbnMtc2VyaWYiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+PC9zdmc+">
+<script src="./Метида управление_files/xlsx.full.min.js.Без названия"></script>
+<script src="./Метида управление_files/jspdf.umd.min.js.Без названия"></script>
+<script src="./Метида управление_files/jspdf.plugin.autotable.min.js.Без названия"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+:root {
+  --primary: #1F4E5C;
+  --primary-light: #2d6a7a;
+  --accent: #C97F4A;
+  --bg: #F5F5F7;
+  --card: #FFFFFF;
+  --text: #1a1a2e;
+  --text-2: #666;
+  --text-3: #999;
+  --border: #E8E8ED;
+  --border-strong: #D0D0D5;
+  --success: #2E7D32;
+  --success-bg: #E8F5E9;
+  --danger: #C62828;
+  --danger-bg: #FFEBEE;
+  --warn: #E65100;
+  --warn-bg: #FFF3E0;
+  --capex-bg: #F3E5F5;
+  --capex: #6A1B9A;
+  --seller-bg: #E0F2F1;
+  --seller: #00695C;
+  --safe-top: env(safe-area-inset-top, 0);
+  --safe-bottom: env(safe-area-inset-bottom, 0);
+}
+html, body {
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+#app { height: 100%; display: flex; flex-direction: column; }
+.header {
+  background: var(--primary);
+  color: white;
+  padding-top: calc(var(--safe-top) + 8px);
+  padding-bottom: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  z-index: 100;
+  flex-shrink: 0;
+}
+.header h1 { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.header-btn {
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+.header-btn:active { background: rgba(255,255,255,0.25); }
+.content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 12px calc(80px + var(--safe-bottom));
+}
+.tabs {
+  display: flex;
+  background: white;
+  border-top: 0.5px solid var(--border);
+  padding-bottom: var(--safe-bottom);
+  flex-shrink: 0;
+  box-shadow: 0 -1px 3px rgba(0,0,0,0.04);
+  overflow-x: auto;
+}
+.tab {
+  flex: 1;
+  min-width: 62px;
+  padding: 8px 4px 6px;
+  text-align: center;
+  cursor: pointer;
+  color: var(--text-3);
+  font-size: 10px;
+  font-weight: 500;
+  border: none;
+  background: none;
+}
+.tab.active { color: var(--primary); }
+.tab-icon { font-size: 20px; display: block; margin-bottom: 2px; line-height: 1; }
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  border: 0.5px solid var(--border);
+}
+.card-title { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: var(--text); line-height: 1.3; }
+.card-sub { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+.section-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-3);
+  padding: 8px 4px 8px;
+  letter-spacing: 0.03em;
+}
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(78px + var(--safe-bottom));
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-size: 26px;
+  font-weight: 300;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(31, 78, 92, 0.35);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.fab:active { transform: scale(0.94); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; display: none; align-items: flex-end; }
+.modal-overlay.show { display: flex; }
+.modal { background: var(--bg); border-radius: 16px 16px 0 0; width: 100%; max-height: 92vh; overflow-y: auto; padding: 16px 16px calc(20px + var(--safe-bottom)); animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 0.5px solid var(--border); }
+.modal-title { font-size: 17px; font-weight: 600; }
+.modal-close { background: none; border: none; font-size: 22px; color: var(--text-2); cursor: pointer; padding: 4px 8px; }
+.form-group { margin-bottom: 14px; }
+.form-label { display: block; font-size: 12px; font-weight: 600; color: var(--text-2); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.02em; }
+.form-input, .form-select, .form-textarea {
+  width: 100%; padding: 11px 12px; border: 1px solid var(--border-strong); border-radius: 10px;
+  font-size: 15px; background: white; color: var(--text); font-family: inherit;
+  -webkit-appearance: none; appearance: none;
+}
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23666' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+}
+.form-textarea { resize: vertical; min-height: 70px; font-family: inherit; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--primary); }
+.form-hint { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+.btn { padding: 12px 20px; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; width: 100%; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:active { background: var(--primary-light); }
+.btn-secondary { background: white; color: var(--primary); border: 1px solid var(--primary); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); }
+.btn-ghost { background: none; color: var(--text-2); }
+.btn-row { display: flex; gap: 8px; margin-top: 16px; }
+.btn-row .btn { flex: 1; }
+.empty { text-align: center; padding: 40px 20px; color: var(--text-3); }
+.empty-icon { font-size: 44px; margin-bottom: 10px; opacity: 0.4; }
+.empty-text { font-size: 14px; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+.badge.success { background: var(--success-bg); color: var(--success); }
+.badge.danger { background: var(--danger-bg); color: var(--danger); }
+.badge.warn { background: var(--warn-bg); color: var(--warn); }
+.badge.info { background: #E8F0FE; color: #1a56c4; }
+.badge.capex { background: var(--capex-bg); color: var(--capex); }
+.badge.seller { background: var(--seller-bg); color: var(--seller); }
+.row-flex { display: flex; align-items: center; gap: 8px; }
+.row-flex > .flex1 { flex: 1; }
+.amount { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.amount.pos { color: var(--success); }
+.amount.neg { color: var(--danger); }
+.amount.capex { color: var(--capex); }
+.amount.seller { color: var(--seller); }
+.tag { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; background: #f0f0f5; color: var(--text-2); margin-right: 4px; margin-bottom: 4px; }
+.tag.primary { background: var(--primary); color: white; }
+.summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.summary-card { background: white; border-radius: 10px; padding: 12px 14px; border: 0.5px solid var(--border); }
+.summary-label { font-size: 11px; color: var(--text-2); text-transform: uppercase; letter-spacing: 0.02em; margin-bottom: 4px; }
+.summary-value { font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.summary-value.pos { color: var(--success); }
+.summary-value.neg { color: var(--danger); }
+.summary-value.capex { color: var(--capex); }
+.summary-value.seller { color: var(--seller); }
+.subtask { padding: 8px 10px; border-left: 2px solid var(--border-strong); margin-left: 8px; margin-top: 4px; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+.subtask input[type=checkbox] { margin-top: 2px; }
+.subtask.done .subtask-text { text-decoration: line-through; color: var(--text-3); }
+.chip-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.chip { padding: 6px 12px; border-radius: 16px; font-size: 12px; font-weight: 500; background: white; border: 1px solid var(--border-strong); color: var(--text-2); cursor: pointer; }
+.chip.active { background: var(--primary); color: white; border-color: var(--primary); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; background: var(--border); border-radius: 10px; overflow: hidden; padding: 2px; }
+.cal-day-h { background: var(--primary); color: white; text-align: center; padding: 6px 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; }
+.cal-day { background: white; min-height: 54px; padding: 4px; cursor: pointer; display: flex; flex-direction: column; }
+.cal-day.other-month { background: #fafafa; color: var(--text-3); }
+.cal-day.today { background: var(--success-bg); }
+.cal-day-num { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+.cal-marker { font-size: 8px; padding: 1px 3px; border-radius: 3px; margin-bottom: 1px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.cal-marker.trip { background: var(--warn-bg); color: var(--warn); }
+.cal-marker.task { background: #E8F0FE; color: #1a56c4; }
+.divider { height: 1px; background: var(--border); margin: 12px 0; }
+.priority-badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 9px; font-weight: 700; text-transform: uppercase; margin-right: 6px; }
+.priority-badge.high { background: #FFEBEE; color: #C62828; }
+.priority-badge.mid { background: #FFF3E0; color: #E65100; }
+.priority-badge.low { background: #E8F5E9; color: #2E7D32; }
+.icon-btn { background: none; border: none; color: var(--text-2); cursor: pointer; padding: 6px 8px; font-size: 14px; }
+.settings-item { background: white; padding: 14px 16px; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.settings-item:first-child { border-radius: 12px 12px 0 0; }
+.settings-item:last-child { border-radius: 0 0 12px 12px; border-bottom: none; }
+.settings-item:only-child { border-radius: 12px; }
+.settings-group { margin-bottom: 20px; border-radius: 12px; overflow: hidden; border: 0.5px solid var(--border); }
+.settings-label { font-size: 15px; }
+.settings-value { font-size: 13px; color: var(--text-2); }
+.pill { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; background: var(--primary); color: white; font-weight: 600; }
+.pill.capex { background: var(--capex); }
+.pill.seller { background: var(--seller); }
+.toast { position: fixed; bottom: calc(100px + var(--safe-bottom)); left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.85); color: white; padding: 10px 18px; border-radius: 22px; font-size: 13px; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.2s; max-width: 90%; text-align: center; }
+.toast.show { opacity: 1; }
+.info-block { background: #FFF9E6; border-left: 3px solid var(--warn); padding: 10px 12px; border-radius: 8px; font-size: 12px; color: #664400; margin-bottom: 10px; line-height: 1.5; }
+.link-list a { display: block; padding: 10px 0; color: var(--primary); text-decoration: none; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+.link-list a:last-child { border-bottom: none; }
+.big-value { font-size: 26px; font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.mini-stat { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; border-bottom: 0.5px solid var(--border); }
+.mini-stat:last-child { border-bottom: none; }
+.mini-stat-label { color: var(--text-2); }
+.mini-stat-value { font-weight: 600; font-variant-numeric: tabular-nums; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="header">
+    <h1 id="page-title">Метида</h1>
+    <div id="header-actions"></div>
+  </header>
+  <main class="content" id="content">
+    <div class="section-title">Операционная деятельность (месяц)</div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Выручка</div>
+        <div class="summary-value pos">250&nbsp;000 ₽</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расходы (OPEX)</div>
+        <div class="summary-value neg">0 ₽</div>
+      </div>
+      <div class="summary-card" style="grid-column: span 2">
+        <div class="summary-label">Операционная прибыль</div>
+        <div class="big-value pos" style="color: var(--success)">250&nbsp;000 ₽</div>
+      </div>
+    </div>
+
+    
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Активных рейсов</div>
+        <div class="summary-value">1</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Открытых задач</div>
+        <div class="summary-value ">10</div>
+      </div>
+    </div>
+
+    
+
+    
+      <div class="section-title">Скоро дедлайн</div>
+      
+          <div class="card" onclick="openTaskDetail(&#39;mssrx60xn57oqo&#39;)">
+            <div class="row-flex">
+              <div class="flex1">
+                <div class="card-title" style="font-size:14px">Провести диагностику транспорта</div>
+                <div class="card-sub">
+                  <span class="badge info">
+                    Через 2 дн.
+                  </span>
+                  <span class="tag">Сделка</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        
+    
+
+    
+      <div class="section-title">Активные рейсы</div>
+      
+    <div class="card" onclick="openTripDetail(&#39;mssrx60xdlxosd&#39;)">
+      <div class="row-flex" style="margin-bottom:6px">
+        <span class="pill">Рейс №1</span>
+        <span class="badge warn">В пути</span>
+        <span class="tag">А723ВС92</span>
+      </div>
+      <div class="card-title">Севастополь → Йошкар-Ола</div>
+      <div class="card-sub">
+        Загрузка: 13.08 · Выезд: 14.08
+        
+      </div>
+      <div class="row-flex" style="margin-top:8px">
+        <div class="flex1">
+          <div style="font-size:11px;color:var(--text-2)">Выручка / OPEX / Прибыль</div>
+          <div style="font-size:13px;font-variant-numeric:tabular-nums">
+            250&nbsp;000 ₽ · 0 ₽ ·
+            <span style="color: var(--success); font-weight:700">250&nbsp;000 ₽</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    
+
+    
+      <div class="empty">
+        <div class="empty-icon">✎</div>
+        <div class="empty-text">Начните добавлять рейсы и расходы —<br>сводка появится здесь</div>
+      </div>
+    
+  </main>
+  <nav class="tabs">
+    <button class="tab active" data-tab="dashboard"><span class="tab-icon">◉</span>Обзор</button>
+    <button class="tab" data-tab="trips"><span class="tab-icon">▶</span>Рейсы</button>
+    <button class="tab" data-tab="calendar"><span class="tab-icon">▦</span>Календарь</button>
+    <button class="tab" data-tab="expenses"><span class="tab-icon">₽</span>Расходы</button>
+    <button class="tab" data-tab="fuel"><span class="tab-icon">⛽</span>Топливо</button>
+    <button class="tab" data-tab="tasks"><span class="tab-icon">✓</span>Задачи</button>
+    <button class="tab" data-tab="settings"><span class="tab-icon">☰</span>Ещё</button>
+  </nav>
+</div>
+<div class="modal-overlay" id="modal"></div>
+<div class="toast" id="toast">Данные из v1 перенесены</div>
+<script>
+// ============ ДАННЫЕ ============
+const STORAGE_KEY = 'metida_app_v2';
+const OLD_KEY = 'metida_app_v1';
+
+const DEFAULT_STATE = {
+  version: 2,
+  vehicles: [
+    { id: 'v1', name: 'Тягач Renault Magnum', reg: 'А723ВС92', vin: 'VF611GTA0E0017221', sts: '99 01 № 655510', year: '2000', type: 'truck', driver: null, active: true, note: '', normFuel: 39, telemetryId: '' },
+    { id: 'v2', name: 'Полуприцеп LAG S339', reg: 'Е849ОО77', vin: 'YB4A0053390007402', sts: '99 01 № 655508', year: '2000', type: 'trailer', driver: null, active: true, note: '', normFuel: 0, telemetryId: '' },
+    { id: 'v3', name: 'ГАЗ 33021', reg: 'А722ВС92', vin: 'Y7D330210V1002528', sts: '99 01 № 655509', year: '1998', type: 'van', driver: null, active: true, note: '', normFuel: 13, telemetryId: '' },
+  ],
+  drivers: [
+    { id: 'd1', name: 'Водитель 1 (фура)', phone: '', note: '' },
+    { id: 'd2', name: 'Водитель 2 (фура)', phone: '', note: '' },
+    { id: 'd3', name: 'Водитель Газели', phone: '', note: '' },
+  ],
+  paymentSources: ['Транзитный счёт ООО', 'Основной счёт ООО', 'Наличные (касса)', 'Личные средства (Ксенофонтов)', 'Карта'],
+  paymentMethods: ['Безнал', 'Наличные', 'СБП', 'Карта', 'Топливная карта'],
+  expenseCategories: ['Топливо', 'Зарплата водителя', 'Платные дороги', 'Стоянки', 'Суточные', 'Ремонт/запчасти', 'Диспетчер', 'Налоги', 'Лизинг', 'Страховка', 'Зарплата бухгалтера', 'Аренда', 'Оборудование (мониторинг, ДУТ)', 'Прочее'],
+  capexCategories: ['Транш продавцу', 'Покупка транспорта', 'Первоначальный взнос по лизингу', 'Оборудование', 'Прочие инвестиции'],
+  sellerCategories: ['Погашение задолженностей', 'Ремонт по п.3.2', 'Замена шин', 'Замена стекла', 'Топливный бак', 'Прочие обязательства Продавца'],
+  paidByOptions: ['Ксенофонтов М.А.', 'Водитель 1', 'Водитель 2', 'Водитель Газели', 'Бухгалтер', 'Директор', 'Автоматически (топливная карта)'],
+  fuelStations: [],
+  freightPlatforms: [
+    { id: 'p1', name: 'ATI.SU', url: 'https://ati.su', note: 'Основная биржа, 90% рынка. Регистрация ~ 5000 руб/мес', active: true },
+    { id: 'p2', name: 'Cargomart', url: 'https://cargomart.ru', note: 'Быстрорастущая, современный интерфейс', active: false },
+    { id: 'p3', name: 'Monopoly.online', url: 'https://monopoly.online', note: 'Часто высокие ставки на сложные направления', active: false },
+    { id: 'p4', name: 'Atrax', url: 'https://atrax.ru', note: 'Тендеры и торги, долгосрочные контракты', active: false },
+    { id: 'p5', name: 'Ozon Truck', url: 'https://ozon-truck.ru', note: 'Ставки Москва-регионы +15-20% к рынку. Нужна аккредитация', active: false },
+    { id: 'p6', name: 'ДА-ТРАНС', url: 'https://da-trans.ru', note: 'Альтернатива ATI', active: false },
+  ],
+  trips: [],
+  expenses: [],
+  fuelLogs: [],
+  tasks: [],
+  settings: { currency: '₽' }
+};
+
+let state = null;
+let currentTab = 'dashboard';
+let calendarMonth = new Date();
+let expenseFilter = 'all';
+let expenseTypeFilter = 'all';
+let taskFilter = 'open';
+let fuelVehicleFilter = 'all';
+
+function loadState() {
+  try {
+    // Try v2 first, then migrate from v1
+    let raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      const oldRaw = localStorage.getItem(OLD_KEY);
+      if (oldRaw) {
+        const oldState = JSON.parse(oldRaw);
+        state = migrateFromV1(oldState);
+        saveState();
+        toast('Данные из v1 перенесены');
+      } else {
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        seedTasks();
+        saveState();
+      }
+    } else {
+      state = JSON.parse(raw);
+      // Ensure all fields exist (migrations for minor updates)
+      Object.keys(DEFAULT_STATE).forEach(key => {
+        if (state[key] === undefined) state[key] = DEFAULT_STATE[key];
+      });
+      if (state.expenses) {
+        state.expenses.forEach(e => {
+          if (!e.type) e.type = 'opex';
+        });
+      }
+    }
+  } catch (e) {
+    console.error('Load error:', e);
+    state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    seedTasks();
+  }
+}
+
+function migrateFromV1(old) {
+  const migrated = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  if (old.vehicles) migrated.vehicles = old.vehicles.map(v => ({ ...v, normFuel: v.normFuel || (v.type === 'truck' ? 39 : v.type === 'van' ? 13 : 0), telemetryId: v.telemetryId || '' }));
+  if (old.drivers) migrated.drivers = old.drivers;
+  if (old.paymentSources) migrated.paymentSources = old.paymentSources;
+  if (old.paymentMethods) migrated.paymentMethods = old.paymentMethods;
+  if (old.expenseCategories) migrated.expenseCategories = old.expenseCategories;
+  if (old.paidByOptions) migrated.paidByOptions = old.paidByOptions;
+  if (old.trips) migrated.trips = old.trips;
+  if (old.tasks) migrated.tasks = old.tasks;
+  // Migrate expenses — set default type = opex, ask user to reclassify manually
+  if (old.expenses) {
+    migrated.expenses = old.expenses.map(e => {
+      let type = 'opex';
+      if (e.category && (e.category.toLowerCase().includes('транш') || e.category.toLowerCase().includes('продав'))) type = 'capex';
+      return { ...e, type };
+    });
+  }
+  return migrated;
+}
+
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  catch (e) { toast('Ошибка сохранения: ' + e.message); }
+}
+
+function seedTasks() {
+  const now = Date.now();
+  const dayMs = 86400000;
+  state.tasks = [
+    // === СДЕЛКА ===
+    { id: uid(), title: 'Открыть Транзитный счёт ООО', category: 'Сделка', priority: 'high', done: false, due: new Date(now + 5*dayMs).toISOString().slice(0,10), note: 'В течение 5 рабочих дней с даты подписания Соглашения (п. 2.6)', subtasks: [] },
+    { id: uid(), title: 'Получить доступ «Менеджер» к интернет-банку', category: 'Сделка', priority: 'high', done: false, due: new Date(now + 10*dayMs).toISOString().slice(0,10), note: 'В течение 5 рабочих дней с даты открытия Транзитного счёта', subtasks: [] },
+    { id: uid(), title: 'Провести диагностику транспорта', category: 'Сделка', priority: 'high', done: false, due: new Date(now + 3*dayMs).toISOString().slice(0,10), note: 'Совместно с продавцом, заполнить Акт диагностики', subtasks: [
+      { id: uid(), text: 'Тягач Renault Magnum', done: false },
+      { id: uid(), text: 'Полуприцеп LAG S339', done: false },
+      { id: uid(), text: 'ГАЗ 33021', done: false }
+    ]},
+    { id: uid(), title: 'Продавец: погасить задолженности за 3 квартал', category: 'Сделка', priority: 'high', done: false, due: '2026-09-01', note: 'Обязательство Продавца по п. 3.1 — до 01.09.2026', subtasks: [] },
+    { id: uid(), title: 'Подписать доп. соглашение с АО «НПОТЭЛ»', category: 'Сделка', priority: 'mid', done: false, due: null, note: 'На условиях Приложения №2', subtasks: [] },
+    { id: uid(), title: 'Оформить стоянку у НПОТЭЛ', category: 'Сделка', priority: 'mid', done: false, due: null, note: 'Гарантийное письмо или допсоглашение (п. 3.6)', subtasks: [] },
+    { id: uid(), title: 'Подать заявку на лизинг второй машины', category: 'Лизинг', priority: 'high', done: false, due: null, note: 'От имени ООО «Метида» (п. 3.7)', subtasks: [] },
+
+    // === ТЕЛЕМАТИКА (новые задачи из v2) ===
+    { id: uid(), title: 'Заказать монтаж GPS-трекера + ДУТ на тягач', category: 'Телематика', priority: 'high', done: false, due: new Date(now + 14*dayMs).toISOString().slice(0,10), note: 'Wialon Hosting. Найти интегратора в Севастополе. Комплект: трекер + 2 датчика уровня топлива (на 2 бака) + тарировка + установка. Ориентировочно 35-50 тыс.', subtasks: [
+      { id: uid(), text: 'Найти 2-3 местных интегратора Wialon в Севастополе', done: false },
+      { id: uid(), text: 'Запросить коммерческие предложения', done: false },
+      { id: uid(), text: 'Выбрать подрядчика и заключить договор', done: false },
+      { id: uid(), text: 'Оплатить оборудование и монтаж', done: false },
+      { id: uid(), text: 'Провести тарировку баков', done: false },
+      { id: uid(), text: 'Получить доступ к платформе Wialon и внести telemetryId в приложение', done: false }
+    ]},
+    { id: uid(), title: 'Установить видеорегистратор с облачной записью', category: 'Телематика', priority: 'mid', done: false, due: null, note: 'StarLine или Neoline с 4G, ~15-20 тыс. Для контроля ДТП и дисциплины водителя', subtasks: [] },
+    { id: uid(), title: 'Идентификаторы водителя (iButton) на тягач', category: 'Телематика', priority: 'low', done: false, due: null, note: '500 руб/шт. Определяем в мониторинге, кто именно ехал', subtasks: [] },
+
+    // === ТОПЛИВО ===
+    { id: uid(), title: 'Оформить мультибрендовую топливную карту на ООО', category: 'Топливо', priority: 'high', done: false, due: new Date(now + 10*dayMs).toISOString().slice(0,10), note: 'ППР или Ликард-мульти. Скидка 2-4 руб/литр, возврат НДС, документы одним пакетом. Экономия ~10 тыс/рейс при 3300 л', subtasks: [
+      { id: uid(), text: 'Сравнить условия ППР, Ликард-мульти, E100, Скала', done: false },
+      { id: uid(), text: 'Подать заявку выбранному оператору', done: false },
+      { id: uid(), text: 'Получить карту и выдать водителям', done: false },
+      { id: uid(), text: 'Настроить лимиты (литров/сутки, суточный лимит по деньгам)', done: false }
+    ]},
+    { id: uid(), title: 'Через 3-6 мес. — рассмотреть монобрендовую карту доминирующей сети', category: 'Топливо', priority: 'low', done: false, due: null, note: 'После накопления статистики: если 60%+ заправок в одной сети — добавить их карту для доп. скидки', subtasks: [] },
+
+    // === ПЛОЩАДКИ ===
+    { id: uid(), title: 'Зарегистрироваться на Cargomart', category: 'Площадки', priority: 'mid', done: false, due: new Date(now + 14*dayMs).toISOString().slice(0,10), note: 'Вторая биржа помимо ATI — расширить пул обратных загрузок', subtasks: [] },
+    { id: uid(), title: 'Подать заявку в Ozon Truck (аккредитация)', category: 'Площадки', priority: 'mid', done: false, due: new Date(now + 30*dayMs).toISOString().slice(0,10), note: 'Ставки на плечи Москва-регионы +15-20% к рынку. Аккредитация занимает 2-4 недели', subtasks: [] },
+
+    // === ОПТИМИЗАЦИЯ ===
+    { id: uid(), title: 'Обсудить с бухгалтером входной НДС по всем расходам', category: 'Оптимизация', priority: 'high', done: false, due: new Date(now + 7*dayMs).toISOString().slice(0,10), note: 'Проверить, что все крупные расходы идут с НДС (топливо, ремонт, запчасти, диспетчер). Каждый рубль входного НДС — минус к налогу', subtasks: [] },
+    { id: uid(), title: 'Оформить страхование ответственности перевозчика (СГО/CMR)', category: 'Страхование', priority: 'mid', done: false, due: null, note: '15-30 тыс/год на машину. Защита от исков грузовладельца', subtasks: [] },
+    { id: uid(), title: 'Через 3 месяца — переговоры с Тавридой о пересмотре ставки', category: 'Оптимизация', priority: 'mid', done: false, due: new Date(now + 90*dayMs).toISOString().slice(0,10), note: 'Показать себестоимость с учётом объезда через Р-280 (+630 км). Ссылаться на п. 4.3 допсоглашения', subtasks: [] },
+    { id: uid(), title: 'Оценить факторинг для оборотки под 2 машины', category: 'Оптимизация', priority: 'low', done: false, due: null, note: '1-2% от суммы, но освобождает оборотные средства. Актуально при второй машине', subtasks: [] },
+    { id: uid(), title: 'Оценить перевод бухгалтерии на аутсорс', category: 'Оптимизация', priority: 'low', done: false, due: null, note: 'Штатный за 36 тыс vs аутсорс 8-15 тыс. Решать через 6 мес., когда работа с продавцом завершится', subtasks: [] },
+    { id: uid(), title: 'Автоматизация путевых листов', category: 'Оптимизация', priority: 'low', done: false, due: null, note: 'RTL-Group / ГЛОНАССsoft / Тахограф.Ру, 500 руб/мес за машину. Актуально после установки мониторинга', subtasks: [] },
+  ];
+}
+
+// ============ УТИЛИТЫ ============
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 8); }
+function fmtMoney(v) {
+  if (v == null || v === '') return '0 ₽';
+  return new Intl.NumberFormat('ru-RU').format(Math.round(v)) + ' ₽';
+}
+function fmtNum(v, digits = 0) {
+  if (v == null || v === '' || isNaN(v)) return '—';
+  return new Intl.NumberFormat('ru-RU', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(v);
+}
+function fmtDate(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+function fmtDateShort(iso) {
+  if (!iso) return '—';
+  return new Date(iso).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit' });
+}
+function daysUntil(iso) {
+  if (!iso) return null;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(iso); target.setHours(0,0,0,0);
+  return Math.round((target - now) / 86400000);
+}
+function esc(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+}
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+function confirmDialog(msg) { return confirm(msg); }
+
+// ============ MODAL ============
+function openModal(title, content, actions) {
+  const overlay = document.getElementById('modal');
+  overlay.innerHTML = `
+    <div class="modal" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <span class="modal-title">${esc(title)}</span>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div id="modal-body">${content}</div>
+      ${actions ? `<div class="btn-row">${actions}</div>` : ''}
+    </div>`;
+  overlay.classList.add('show');
+  overlay.onclick = closeModal;
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() {
+  const overlay = document.getElementById('modal');
+  overlay.classList.remove('show');
+  overlay.innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+// ============ HELPERS ============
+function getMonthStart(d = new Date()) {
+  const x = new Date(d); x.setDate(1); x.setHours(0,0,0,0); return x;
+}
+function inPeriod(iso, from, to) {
+  if (!iso) return false;
+  const d = new Date(iso);
+  if (from && d < from) return false;
+  if (to && d > to) return false;
+  return true;
+}
+function getOpexExpenses() { return state.expenses.filter(e => e.type === 'opex'); }
+function getCapexExpenses() { return state.expenses.filter(e => e.type === 'capex'); }
+function getSellerExpenses() { return state.expenses.filter(e => e.type === 'seller'); }
+
+function getMonthOpex(d = new Date()) {
+  const from = getMonthStart(d);
+  return getOpexExpenses().filter(e => inPeriod(e.date, from)).reduce((s, e) => s + Number(e.amount || 0), 0);
+}
+function getMonthRevenue(d = new Date()) {
+  const from = getMonthStart(d);
+  return state.trips.filter(t => t.departureDate && inPeriod(t.departureDate, from))
+    .reduce((s, t) => s + Number(t.rateTo || 0) + Number(t.rateBack || 0), 0);
+}
+function getTotalCapex() { return getCapexExpenses().reduce((s, e) => s + Number(e.amount || 0), 0); }
+function getTotalSeller() { return getSellerExpenses().reduce((s, e) => s + Number(e.amount || 0), 0); }
+
+// ============ ОБЗОР ============
+function renderDashboard() {
+  document.getElementById('page-title').textContent = 'Метида';
+  document.getElementById('header-actions').innerHTML = '';
+
+  const monthRevenue = getMonthRevenue();
+  const monthOpex = getMonthOpex();
+  const opProfit = monthRevenue - monthOpex;
+  const totalCapex = getTotalCapex();
+  const totalSeller = getTotalSeller();
+  const totalOpProfit = state.trips.reduce((s, t) => s + Number(t.rateTo || 0) + Number(t.rateBack || 0), 0)
+    - getOpexExpenses().reduce((s, e) => s + Number(e.amount || 0), 0);
+  const paybackMonths = opProfit > 0 && totalCapex > 0 ? Math.ceil((totalCapex - totalOpProfit) / opProfit) : null;
+  const activeTrips = state.trips.filter(t => t.status === 'in_progress');
+  const openTasks = state.tasks.filter(t => !t.done);
+  const overdueTasks = openTasks.filter(t => t.due && daysUntil(t.due) < 0);
+  const dueSoonTasks = openTasks.filter(t => t.due && daysUntil(t.due) >= 0 && daysUntil(t.due) <= 3);
+
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="section-title">Операционная деятельность (месяц)</div>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Выручка</div>
+        <div class="summary-value pos">${fmtMoney(monthRevenue)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расходы (OPEX)</div>
+        <div class="summary-value neg">${fmtMoney(monthOpex)}</div>
+      </div>
+      <div class="summary-card" style="grid-column: span 2">
+        <div class="summary-label">Операционная прибыль</div>
+        <div class="big-value ${opProfit >= 0 ? 'pos' : 'neg'}" style="color: ${opProfit >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtMoney(opProfit)}</div>
+      </div>
+    </div>
+
+    ${totalCapex > 0 ? `
+      <div class="section-title">Инвестиции в проект (нарастающим итогом)</div>
+      <div class="card">
+        <div class="mini-stat">
+          <span class="mini-stat-label">Капитальные вложения (CAPEX)</span>
+          <span class="mini-stat-value" style="color:var(--capex)">${fmtMoney(totalCapex)}</span>
+        </div>
+        ${totalSeller > 0 ? `
+          <div class="mini-stat">
+            <span class="mini-stat-label">Расходы Продавца (для Транша 5)</span>
+            <span class="mini-stat-value" style="color:var(--seller)">${fmtMoney(totalSeller)}</span>
+          </div>
+        ` : ''}
+        <div class="mini-stat">
+          <span class="mini-stat-label">Накоплено операционной прибыли</span>
+          <span class="mini-stat-value" style="color:var(--success)">${fmtMoney(totalOpProfit)}</span>
+        </div>
+        ${paybackMonths !== null && paybackMonths > 0 ? `
+          <div class="mini-stat">
+            <span class="mini-stat-label">Прогноз окупаемости</span>
+            <span class="mini-stat-value">≈ ${paybackMonths} мес.</span>
+          </div>
+        ` : paybackMonths !== null && paybackMonths <= 0 ? `
+          <div class="mini-stat">
+            <span class="mini-stat-label">Статус</span>
+            <span class="mini-stat-value" style="color:var(--success)">Окупился ✓</span>
+          </div>
+        ` : ''}
+      </div>
+    ` : ''}
+
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Активных рейсов</div>
+        <div class="summary-value">${activeTrips.length}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Открытых задач</div>
+        <div class="summary-value ${overdueTasks.length > 0 ? 'neg' : ''}">${openTasks.length}${overdueTasks.length > 0 ? ' (' + overdueTasks.length + ' просроч.)' : ''}</div>
+      </div>
+    </div>
+
+    ${overdueTasks.length > 0 ? `
+      <div class="section-title">⚠ Просрочено</div>
+      ${overdueTasks.slice(0, 3).map(t => `
+        <div class="card" onclick="openTaskDetail('${t.id}')">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(t.title)}</div>
+              <div class="card-sub"><span class="badge danger">Просрочено на ${Math.abs(daysUntil(t.due))} дн.</span> ${t.category ? '<span class="tag">' + esc(t.category) + '</span>' : ''}</div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    ` : ''}
+
+    ${dueSoonTasks.length > 0 ? `
+      <div class="section-title">Скоро дедлайн</div>
+      ${dueSoonTasks.slice(0, 4).map(t => {
+        const d = daysUntil(t.due);
+        return `
+          <div class="card" onclick="openTaskDetail('${t.id}')">
+            <div class="row-flex">
+              <div class="flex1">
+                <div class="card-title" style="font-size:14px">${esc(t.title)}</div>
+                <div class="card-sub">
+                  <span class="badge ${d === 0 ? 'danger' : (d <= 1 ? 'warn' : 'info')}">
+                    ${d === 0 ? 'Сегодня' : d === 1 ? 'Завтра' : 'Через ' + d + ' дн.'}
+                  </span>
+                  ${t.category ? '<span class="tag">' + esc(t.category) + '</span>' : ''}
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('')}
+    ` : ''}
+
+    ${activeTrips.length > 0 ? `
+      <div class="section-title">Активные рейсы</div>
+      ${activeTrips.map(t => renderTripCard(t)).join('')}
+    ` : ''}
+
+    ${state.expenses.length > 0 ? `
+      <div class="section-title">Последние расходы</div>
+      ${[...state.expenses].sort((a,b) => (b.date || '').localeCompare(a.date || '')).slice(0, 5).map(e => renderExpenseListItem(e)).join('')}
+    ` : `
+      <div class="empty">
+        <div class="empty-icon">✎</div>
+        <div class="empty-text">Начните добавлять рейсы и расходы —<br>сводка появится здесь</div>
+      </div>
+    `}
+  `;
+}
+
+function renderTripCard(t) {
+  const vehicle = state.vehicles.find(v => v.id === t.vehicleId);
+  const tripExpenses = state.expenses.filter(e => e.tripId === t.id && e.type === 'opex');
+  const totalExp = tripExpenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const revenue = Number(t.rateTo || 0) + Number(t.rateBack || 0);
+  const profit = revenue - totalExp;
+  const statusMap = {
+    planned: { text: 'Запланирован', cls: 'info' },
+    in_progress: { text: 'В пути', cls: 'warn' },
+    completed: { text: 'Завершён', cls: 'success' }
+  };
+  const st = statusMap[t.status] || statusMap.planned;
+  return `
+    <div class="card" onclick="openTripDetail('${t.id}')">
+      <div class="row-flex" style="margin-bottom:6px">
+        <span class="pill">Рейс №${t.number}</span>
+        <span class="badge ${st.cls}">${st.text}</span>
+        ${vehicle ? `<span class="tag">${esc(vehicle.reg)}</span>` : ''}
+      </div>
+      <div class="card-title">${esc(t.routeTo || '—')}</div>
+      <div class="card-sub">
+        Загрузка: ${fmtDateShort(t.loadDate)} · Выезд: ${fmtDateShort(t.departureDate)}
+        ${t.arrivalDate ? ' · Прибытие: ' + fmtDateShort(t.arrivalDate) : ''}
+      </div>
+      <div class="row-flex" style="margin-top:8px">
+        <div class="flex1">
+          <div style="font-size:11px;color:var(--text-2)">Выручка / OPEX / Прибыль</div>
+          <div style="font-size:13px;font-variant-numeric:tabular-nums">
+            ${fmtMoney(revenue)} · ${fmtMoney(totalExp)} ·
+            <span style="color: ${profit >= 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700">${fmtMoney(profit)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderExpenseListItem(e) {
+  const trip = e.tripId ? state.trips.find(t => t.id === e.tripId) : null;
+  const typeBadge = e.type === 'capex' ? '<span class="badge capex">CAPEX</span>' :
+                    e.type === 'seller' ? '<span class="badge seller">Продавец</span>' :
+                    '';
+  return `
+    <div class="card" onclick="openExpenseForm('${e.id}')">
+      <div class="row-flex">
+        <div class="flex1">
+          <div class="card-title" style="font-size:14px">${typeBadge} ${esc(e.category)}</div>
+          <div class="card-sub">${fmtDateShort(e.date)} · ${esc(e.source)}${trip ? ' · <span class="tag">Рейс №' + trip.number + '</span>' : ''}</div>
+          ${e.note ? `<div class="card-sub" style="margin-top:2px">${esc(e.note.slice(0, 60))}${e.note.length > 60 ? '…' : ''}</div>` : ''}
+        </div>
+        <div class="amount ${e.type === 'capex' ? 'capex' : e.type === 'seller' ? 'seller' : 'neg'}">
+          ${e.type === 'opex' ? '−' : ''}${fmtMoney(e.amount)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ============ РЕЙСЫ ============
+function renderTrips() {
+  document.getElementById('page-title').textContent = 'Рейсы';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  if (state.trips.length === 0) {
+    c.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">▶</div>
+        <div class="empty-text">Нет рейсов<br><br>Нажмите + чтобы добавить</div>
+      </div>
+      <button class="fab" onclick="openTripForm()">+</button>
+    `;
+    return;
+  }
+
+  const groups = { in_progress: [], planned: [], completed: [] };
+  state.trips.forEach(t => (groups[t.status] || groups.planned).push(t));
+
+  c.innerHTML = `
+    ${groups.in_progress.length ? `<div class="section-title">В пути</div>${groups.in_progress.map(renderTripCard).join('')}` : ''}
+    ${groups.planned.length ? `<div class="section-title">Запланированные</div>${groups.planned.map(renderTripCard).join('')}` : ''}
+    ${groups.completed.length ? `<div class="section-title">Завершённые</div>${[...groups.completed].reverse().slice(0, 20).map(renderTripCard).join('')}` : ''}
+    <button class="fab" onclick="openTripForm()">+</button>
+  `;
+}
+
+function openTripForm(id) {
+  const trip = id ? state.trips.find(t => t.id === id) : null;
+  const nextNum = state.trips.length ? Math.max(...state.trips.map(t => t.number || 0)) + 1 : 1;
+  const vehiclesOpts = state.vehicles.filter(v => v.active && v.type !== 'trailer')
+    .map(v => `<option value="${v.id}" ${trip?.vehicleId === v.id ? 'selected' : ''}>${esc(v.name)} (${esc(v.reg)})</option>`).join('');
+  const driversOpts = state.drivers.map(d =>
+    `<option value="${d.id}" ${trip?.driverId === d.id ? 'selected' : ''}>${esc(d.name)}</option>`).join('');
+  const platformsOpts = ['<option value="">— не указана —</option>', ...state.freightPlatforms.map(p => `<option value="${p.id}" ${trip?.platformBackId === p.id ? 'selected' : ''}>${esc(p.name)}</option>`)].join('');
+
+  openModal(trip ? `Рейс №${trip.number}` : 'Новый рейс', `
+    <form id="trip-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Номер рейса</label>
+        <input type="number" class="form-input" name="number" value="${trip?.number || nextNum}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Машина</label>
+        <select class="form-select" name="vehicleId">${vehiclesOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Водитель</label>
+        <select class="form-select" name="driverId">${driversOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Маршрут туда</label>
+        <input type="text" class="form-input" name="routeTo" value="${esc(trip?.routeTo || 'Севастополь → Йошкар-Ола')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Груз туда</label>
+        <input type="text" class="form-input" name="cargoTo" value="${esc(trip?.cargoTo || 'Груз АО «НПОТЭЛ»')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ставка туда (₽)</label>
+        <input type="number" class="form-input" name="rateTo" value="${trip?.rateTo || 250000}" step="1000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Маршрут обратно</label>
+        <input type="text" class="form-input" name="routeBack" value="${esc(trip?.routeBack || 'Йошкар-Ола → Севастополь')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Груз обратно</label>
+        <input type="text" class="form-input" name="cargoBack" value="${esc(trip?.cargoBack || '')}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ставка обратно (₽)</label>
+        <input type="number" class="form-input" name="rateBack" value="${trip?.rateBack || 0}" step="1000">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Источник обратной загрузки</label>
+        <select class="form-select" name="platformBackId">${platformsOpts}</select>
+        <div class="form-hint">Из какой площадки/источника получен груз обратно (для статистики)</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Пробег за рейс, км (опционально)</label>
+        <input type="number" class="form-input" name="mileage" value="${trip?.mileage || ''}" step="1">
+        <div class="form-hint">Для расчёта фактического расхода топлива</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата загрузки</label>
+        <input type="date" class="form-input" name="loadDate" value="${trip?.loadDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата выезда</label>
+        <input type="date" class="form-input" name="departureDate" value="${trip?.departureDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата прибытия</label>
+        <input type="date" class="form-input" name="arrivalDate" value="${trip?.arrivalDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата возврата</label>
+        <input type="date" class="form-input" name="returnDate" value="${trip?.returnDate || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Статус</label>
+        <select class="form-select" name="status">
+          <option value="planned" ${trip?.status === 'planned' ? 'selected' : ''}>Запланирован</option>
+          <option value="in_progress" ${trip?.status === 'in_progress' || !trip ? 'selected' : ''}>В пути</option>
+          <option value="completed" ${trip?.status === 'completed' ? 'selected' : ''}>Завершён</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(trip?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${trip ? `<button class="btn btn-danger" onclick="deleteTrip('${trip.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveTrip('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function saveTrip(id) {
+  const f = document.getElementById('trip-form');
+  const data = {
+    number: Number(f.number.value),
+    vehicleId: f.vehicleId.value,
+    driverId: f.driverId.value,
+    routeTo: f.routeTo.value.trim(),
+    cargoTo: f.cargoTo.value.trim(),
+    rateTo: Number(f.rateTo.value) || 0,
+    routeBack: f.routeBack.value.trim(),
+    cargoBack: f.cargoBack.value.trim(),
+    rateBack: Number(f.rateBack.value) || 0,
+    platformBackId: f.platformBackId.value || null,
+    mileage: Number(f.mileage.value) || 0,
+    loadDate: f.loadDate.value || null,
+    departureDate: f.departureDate.value || null,
+    arrivalDate: f.arrivalDate.value || null,
+    returnDate: f.returnDate.value || null,
+    status: f.status.value,
+    note: f.note.value.trim()
+  };
+  if (id) {
+    const i = state.trips.findIndex(t => t.id === id);
+    state.trips[i] = { ...state.trips[i], ...data };
+    toast('Рейс обновлён');
+  } else {
+    state.trips.push({ id: uid(), ...data });
+    toast('Рейс добавлен');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteTrip(id) {
+  if (!confirmDialog('Удалить рейс? Связанные расходы останутся.')) return;
+  state.trips = state.trips.filter(t => t.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function openTripDetail(id) {
+  const t = state.trips.find(x => x.id === id);
+  if (!t) return;
+  const vehicle = state.vehicles.find(v => v.id === t.vehicleId);
+  const driver = state.drivers.find(d => d.id === t.driverId);
+  const platform = t.platformBackId ? state.freightPlatforms.find(p => p.id === t.platformBackId) : null;
+  const tripExpenses = state.expenses.filter(e => e.tripId === id && e.type === 'opex').sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  const totalExp = tripExpenses.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const revenue = Number(t.rateTo || 0) + Number(t.rateBack || 0);
+  const profit = revenue - totalExp;
+  const tripFuel = state.fuelLogs.filter(f => f.tripId === id);
+  const fuelLiters = tripFuel.reduce((s, f) => s + Number(f.liters || 0), 0);
+  const fuelCost = tripFuel.reduce((s, f) => s + Number(f.total || 0), 0);
+  const actualConsumption = t.mileage > 0 && fuelLiters > 0 ? (fuelLiters / t.mileage * 100) : null;
+
+  const body = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Выручка</div>
+        <div class="summary-value pos">${fmtMoney(revenue)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расходы (OPEX)</div>
+        <div class="summary-value neg">${fmtMoney(totalExp)}</div>
+      </div>
+      <div class="summary-card" style="grid-column: span 2">
+        <div class="summary-label">Прибыль рейса</div>
+        <div class="big-value" style="color: ${profit >= 0 ? 'var(--success)' : 'var(--danger)'}">${fmtMoney(profit)}</div>
+      </div>
+    </div>
+
+    ${tripFuel.length > 0 ? `
+      <div class="card">
+        <div class="card-title" style="font-size:14px">Топливо по рейсу</div>
+        <div class="mini-stat"><span class="mini-stat-label">Заправлено, л</span><span class="mini-stat-value">${fmtNum(fuelLiters, 1)}</span></div>
+        <div class="mini-stat"><span class="mini-stat-label">Стоимость</span><span class="mini-stat-value">${fmtMoney(fuelCost)}</span></div>
+        ${t.mileage ? `<div class="mini-stat"><span class="mini-stat-label">Пробег</span><span class="mini-stat-value">${fmtNum(t.mileage)} км</span></div>` : ''}
+        ${actualConsumption ? `<div class="mini-stat"><span class="mini-stat-label">Расход факт</span><span class="mini-stat-value" style="color: ${vehicle && actualConsumption > vehicle.normFuel * 1.1 ? 'var(--danger)' : 'var(--text)'}">${fmtNum(actualConsumption, 1)} л/100км</span></div>` : ''}
+        ${vehicle && vehicle.normFuel ? `<div class="mini-stat"><span class="mini-stat-label">Норма</span><span class="mini-stat-value">${vehicle.normFuel} л/100км</span></div>` : ''}
+      </div>
+    ` : ''}
+
+    <div class="card">
+      <div class="card-title">${esc(t.routeTo || '')}</div>
+      <div class="card-sub">Груз: ${esc(t.cargoTo || '—')} · Ставка: ${fmtMoney(t.rateTo)}</div>
+      ${t.routeBack ? `
+        <div class="divider"></div>
+        <div class="card-title" style="font-size:14px">Обратно: ${esc(t.routeBack)}</div>
+        <div class="card-sub">Груз: ${esc(t.cargoBack || '—')} · Ставка: ${fmtMoney(t.rateBack)}${platform ? ' · Через: ' + esc(platform.name) : ''}</div>
+      ` : ''}
+      <div class="divider"></div>
+      <div class="card-sub">
+        ${vehicle ? '<b>Машина:</b> ' + esc(vehicle.name) + ' (' + esc(vehicle.reg) + ')<br>' : ''}
+        ${driver ? '<b>Водитель:</b> ' + esc(driver.name) + '<br>' : ''}
+        <b>Загрузка:</b> ${fmtDate(t.loadDate)}<br>
+        <b>Выезд:</b> ${fmtDate(t.departureDate)}<br>
+        <b>Прибытие:</b> ${fmtDate(t.arrivalDate)}<br>
+        <b>Возврат:</b> ${fmtDate(t.returnDate)}
+      </div>
+      ${t.note ? `<div class="divider"></div><div class="card-sub">${esc(t.note)}</div>` : ''}
+    </div>
+
+    <div class="section-title">Расходы по рейсу (${tripExpenses.length})</div>
+    ${tripExpenses.length === 0 ? '<div class="empty" style="padding:20px"><div class="empty-text">Ещё нет расходов</div></div>' :
+      tripExpenses.map(e => `
+        <div class="card" onclick="closeModal(); setTimeout(() => openExpenseForm('${e.id}'), 250)">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(e.category)}</div>
+              <div class="card-sub">${fmtDateShort(e.date)} · ${esc(e.source)}${e.paidBy ? ' · ' + esc(e.paidBy) : ''}</div>
+            </div>
+            <div class="amount neg" style="font-size:15px">−${fmtMoney(e.amount)}</div>
+          </div>
+        </div>
+      `).join('')
+    }
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="closeModal(); setTimeout(() => openExpenseForm(null, '${id}'), 250)">+ Расход</button>
+      <button class="btn btn-secondary" onclick="closeModal(); setTimeout(() => openFuelForm(null, '${id}'), 250)">+ Заправка</button>
+    </div>
+  `;
+  openModal(`Рейс №${t.number}`, body, `
+    <button class="btn btn-secondary" onclick="openTripForm('${id}')">Редактировать</button>
+  `);
+}
+
+
+// ============ РАСХОДЫ ============
+function renderExpenses() {
+  document.getElementById('page-title').textContent = 'Расходы';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  const monthStart = getMonthStart();
+  let list = [...state.expenses].sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+
+  if (expenseTypeFilter !== 'all') list = list.filter(e => e.type === expenseTypeFilter);
+  if (expenseFilter === 'month') list = list.filter(e => new Date(e.date) >= monthStart);
+
+  const monthOpex = getMonthOpex();
+  const totalCapex = getTotalCapex();
+  const totalSeller = getTotalSeller();
+
+  const bySrc = {};
+  state.expenses.filter(e => new Date(e.date) >= monthStart).forEach(e => {
+    bySrc[e.source] = (bySrc[e.source] || 0) + Number(e.amount || 0);
+  });
+
+  c.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">OPEX за месяц</div>
+        <div class="summary-value neg">${fmtMoney(monthOpex)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">CAPEX всего</div>
+        <div class="summary-value capex">${fmtMoney(totalCapex)}</div>
+      </div>
+      ${totalSeller > 0 ? `
+        <div class="summary-card" style="grid-column: span 2">
+          <div class="summary-label">Расходы Продавца (для Транша 5)</div>
+          <div class="summary-value seller">${fmtMoney(totalSeller)}</div>
+        </div>
+      ` : ''}
+    </div>
+
+    ${Object.keys(bySrc).length > 0 ? `
+      <div class="card">
+        <div class="card-title" style="font-size:13px;margin-bottom:8px">По источникам оплаты (месяц)</div>
+        ${Object.entries(bySrc).map(([src, amt]) => `
+          <div class="mini-stat">
+            <span class="mini-stat-label">${esc(src)}</span>
+            <span class="mini-stat-value" style="color:var(--danger)">${fmtMoney(amt)}</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    <div class="chip-row">
+      <div class="chip ${expenseTypeFilter === 'all' ? 'active' : ''}" onclick="expenseTypeFilter='all'; render()">Все типы</div>
+      <div class="chip ${expenseTypeFilter === 'opex' ? 'active' : ''}" onclick="expenseTypeFilter='opex'; render()">OPEX</div>
+      <div class="chip ${expenseTypeFilter === 'capex' ? 'active' : ''}" onclick="expenseTypeFilter='capex'; render()">CAPEX</div>
+      <div class="chip ${expenseTypeFilter === 'seller' ? 'active' : ''}" onclick="expenseTypeFilter='seller'; render()">Продавец</div>
+    </div>
+    <div class="chip-row">
+      <div class="chip ${expenseFilter === 'all' ? 'active' : ''}" onclick="expenseFilter='all'; render()">За всё время</div>
+      <div class="chip ${expenseFilter === 'month' ? 'active' : ''}" onclick="expenseFilter='month'; render()">За месяц</div>
+    </div>
+
+    ${list.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">₽</div>
+        <div class="empty-text">Расходов по фильтру нет</div>
+      </div>
+    ` : list.map(e => renderExpenseListItem(e)).join('')}
+    <button class="fab" onclick="openExpenseForm()">+</button>
+  `;
+}
+
+function openExpenseForm(id, presetTripId) {
+  const exp = id ? state.expenses.find(e => e.id === id) : null;
+  const today = new Date().toISOString().slice(0,10);
+  const currentType = exp?.type || 'opex';
+
+  const catList = currentType === 'capex' ? state.capexCategories :
+                  currentType === 'seller' ? state.sellerCategories :
+                  state.expenseCategories;
+  const catOpts = catList.map(c => `<option value="${esc(c)}" ${exp?.category === c ? 'selected' : ''}>${esc(c)}</option>`).join('');
+  const srcOpts = state.paymentSources.map(s => `<option value="${esc(s)}" ${exp?.source === s ? 'selected' : ''}>${esc(s)}</option>`).join('');
+  const methodOpts = state.paymentMethods.map(m => `<option value="${esc(m)}" ${exp?.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('');
+  const paidByOpts = ['<option value="">— не указано —</option>', ...state.paidByOptions.map(p => `<option value="${esc(p)}" ${exp?.paidBy === p ? 'selected' : ''}>${esc(p)}</option>`)].join('');
+  const tripOpts = ['<option value="">— без рейса —</option>', ...state.trips.map(t => `<option value="${t.id}" ${(exp?.tripId || presetTripId) === t.id ? 'selected' : ''}>Рейс №${t.number}${t.routeTo ? ' · ' + esc(t.routeTo.slice(0,30)) : ''}</option>`)].join('');
+
+  openModal(exp ? 'Расход' : 'Новый расход', `
+    <form id="exp-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Тип расхода</label>
+        <select class="form-select" name="type" onchange="reloadExpenseCategories(this.value)">
+          <option value="opex" ${currentType === 'opex' ? 'selected' : ''}>OPEX (операционный)</option>
+          <option value="capex" ${currentType === 'capex' ? 'selected' : ''}>CAPEX (капитальные вложения)</option>
+          <option value="seller" ${currentType === 'seller' ? 'selected' : ''}>Расходы Продавца (для Транша 5)</option>
+        </select>
+        <div class="form-hint">OPEX — вычитается из прибыли рейса/месяца. CAPEX — инвестиции в проект. Расходы Продавца — учёт по обязательствам п. 3.1-3.2 Соглашения для расчёта Транша 5.</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Сумма (₽)</label>
+        <input type="number" class="form-input" name="amount" value="${exp?.amount || ''}" step="0.01" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <select class="form-select" name="category" id="exp-category" required>${catOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Источник оплаты</label>
+        <select class="form-select" name="source" required>${srcOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Способ</label>
+        <select class="form-select" name="method">${methodOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Кем оплачено</label>
+        <select class="form-select" name="paidBy">${paidByOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Рейс (опционально)</label>
+        <select class="form-select" name="tripId">${tripOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата</label>
+        <input type="date" class="form-input" name="date" value="${exp?.date || today}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(exp?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${exp ? `<button class="btn btn-danger" onclick="deleteExpense('${exp.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveExpense('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function reloadExpenseCategories(type) {
+  const catList = type === 'capex' ? state.capexCategories :
+                  type === 'seller' ? state.sellerCategories :
+                  state.expenseCategories;
+  const catSel = document.getElementById('exp-category');
+  catSel.innerHTML = catList.map(c => `<option value="${esc(c)}">${esc(c)}</option>`).join('');
+}
+
+function saveExpense(id) {
+  const f = document.getElementById('exp-form');
+  const data = {
+    type: f.type.value,
+    amount: Number(f.amount.value),
+    category: f.category.value,
+    source: f.source.value,
+    method: f.method.value,
+    paidBy: f.paidBy.value,
+    tripId: f.tripId.value || null,
+    date: f.date.value,
+    note: f.note.value.trim()
+  };
+  if (!data.amount || data.amount <= 0) { toast('Введите сумму'); return; }
+  if (id) {
+    const i = state.expenses.findIndex(e => e.id === id);
+    state.expenses[i] = { ...state.expenses[i], ...data };
+    toast('Расход обновлён');
+  } else {
+    state.expenses.push({ id: uid(), ...data });
+    toast('Расход добавлен');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteExpense(id) {
+  if (!confirmDialog('Удалить расход?')) return;
+  state.expenses = state.expenses.filter(e => e.id !== id);
+  saveState(); closeModal(); render();
+}
+
+// ============ ТОПЛИВО ============
+function renderFuel() {
+  document.getElementById('page-title').textContent = 'Топливо';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  let logs = [...state.fuelLogs].sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  if (fuelVehicleFilter !== 'all') logs = logs.filter(f => f.vehicleId === fuelVehicleFilter);
+
+  const monthStart = getMonthStart();
+  const monthLogs = state.fuelLogs.filter(f => new Date(f.date) >= monthStart);
+  const monthLiters = monthLogs.reduce((s, f) => s + Number(f.liters || 0), 0);
+  const monthCost = monthLogs.reduce((s, f) => s + Number(f.total || 0), 0);
+  const avgPrice = monthLiters > 0 ? monthCost / monthLiters : 0;
+
+  // Consumption by vehicle (all-time)
+  const byVehicle = {};
+  state.vehicles.forEach(v => {
+    if (v.type === 'trailer') return;
+    const vLogs = state.fuelLogs.filter(f => f.vehicleId === v.id);
+    const totalL = vLogs.reduce((s, f) => s + Number(f.liters || 0), 0);
+    const totalC = vLogs.reduce((s, f) => s + Number(f.total || 0), 0);
+    // total mileage from trips of this vehicle
+    const totalKm = state.trips.filter(t => t.vehicleId === v.id).reduce((s, t) => s + Number(t.mileage || 0), 0);
+    const consumption = totalKm > 0 ? (totalL / totalKm * 100) : null;
+    byVehicle[v.id] = { vehicle: v, liters: totalL, cost: totalC, km: totalKm, consumption };
+  });
+
+  const vehiclesForFilter = state.vehicles.filter(v => v.type !== 'trailer' && v.active);
+  const vFilterChips = ['<div class="chip ' + (fuelVehicleFilter === 'all' ? 'active' : '') + '" onclick="fuelVehicleFilter=\'all\'; render()">Все машины</div>',
+    ...vehiclesForFilter.map(v => `<div class="chip ${fuelVehicleFilter === v.id ? 'active' : ''}" onclick="fuelVehicleFilter='${v.id}'; render()">${esc(v.reg)}</div>`)].join('');
+
+  c.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Литров за месяц</div>
+        <div class="summary-value">${fmtNum(monthLiters, 1)} л</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Стоимость за месяц</div>
+        <div class="summary-value neg">${fmtMoney(monthCost)}</div>
+      </div>
+      <div class="summary-card" style="grid-column: span 2">
+        <div class="summary-label">Средняя цена / литр</div>
+        <div class="summary-value">${avgPrice > 0 ? fmtNum(avgPrice, 2) + ' ₽/л' : '—'}</div>
+      </div>
+    </div>
+
+    ${Object.keys(byVehicle).length > 0 && Object.values(byVehicle).some(x => x.liters > 0) ? `
+      <div class="card">
+        <div class="card-title" style="font-size:13px;margin-bottom:8px">Расход по машинам (всего)</div>
+        ${Object.values(byVehicle).filter(x => x.liters > 0).map(x => {
+          const norm = x.vehicle.normFuel;
+          const flag = norm && x.consumption ? (x.consumption > norm * 1.1 ? 'neg' : x.consumption < norm * 0.9 ? 'pos' : '') : '';
+          return `
+            <div style="padding:8px 0;border-bottom:0.5px solid var(--border)">
+              <div style="font-size:13px;font-weight:600">${esc(x.vehicle.name)} (${esc(x.vehicle.reg)})</div>
+              <div class="mini-stat"><span class="mini-stat-label">Заправлено</span><span class="mini-stat-value">${fmtNum(x.liters, 1)} л на ${fmtMoney(x.cost)}</span></div>
+              <div class="mini-stat"><span class="mini-stat-label">Пробег</span><span class="mini-stat-value">${fmtNum(x.km)} км</span></div>
+              ${x.consumption ? `<div class="mini-stat"><span class="mini-stat-label">Расход факт${norm ? ' (норма ' + norm + ')' : ''}</span><span class="mini-stat-value" style="color: ${flag === 'neg' ? 'var(--danger)' : flag === 'pos' ? 'var(--success)' : 'var(--text)'}">${fmtNum(x.consumption, 1)} л/100км</span></div>` : ''}
+            </div>
+          `;
+        }).join('')}
+      </div>
+    ` : ''}
+
+    <div class="info-block">
+      <b>Важно:</b> для расчёта реального расхода на каждый рейс нужно вносить пробег (в карточке рейса). После установки GPS/ДУТ данные можно будет сверять автоматически.
+    </div>
+
+    <div class="chip-row">${vFilterChips}</div>
+
+    ${logs.length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">⛽</div>
+        <div class="empty-text">Заправок пока нет<br><br>Нажмите + чтобы добавить</div>
+      </div>
+    ` : logs.map(f => {
+      const v = state.vehicles.find(x => x.id === f.vehicleId);
+      const trip = f.tripId ? state.trips.find(t => t.id === f.tripId) : null;
+      return `
+        <div class="card" onclick="openFuelForm('${f.id}')">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${fmtNum(f.liters, 1)} л · ${fmtNum(f.pricePerLiter, 2)} ₽/л</div>
+              <div class="card-sub">
+                ${fmtDateShort(f.date)} · ${v ? esc(v.reg) : '—'}
+                ${f.station ? ' · ' + esc(f.station) : ''}
+                ${trip ? ' · <span class="tag">Рейс №' + trip.number + '</span>' : ''}
+              </div>
+            </div>
+            <div class="amount neg" style="font-size:15px">−${fmtMoney(f.total)}</div>
+          </div>
+        </div>
+      `;
+    }).join('')}
+    <button class="fab" onclick="openFuelForm()">+</button>
+  `;
+}
+
+function openFuelForm(id, presetTripId) {
+  const log = id ? state.fuelLogs.find(f => f.id === id) : null;
+  const today = new Date().toISOString().slice(0,10);
+  const vehiclesOpts = state.vehicles.filter(v => v.active && v.type !== 'trailer')
+    .map(v => `<option value="${v.id}" ${log?.vehicleId === v.id ? 'selected' : ''}>${esc(v.name)} (${esc(v.reg)})</option>`).join('');
+  const tripOpts = ['<option value="">— без рейса —</option>', ...state.trips.map(t => `<option value="${t.id}" ${(log?.tripId || presetTripId) === t.id ? 'selected' : ''}>Рейс №${t.number}</option>`)].join('');
+  const srcOpts = state.paymentSources.map(s => `<option value="${esc(s)}" ${log?.source === s ? 'selected' : ''}>${esc(s)}</option>`).join('');
+  const methodOpts = state.paymentMethods.map(m => `<option value="${esc(m)}" ${log?.method === m ? 'selected' : ''}>${esc(m)}</option>`).join('');
+
+  openModal(log ? 'Заправка' : 'Новая заправка', `
+    <form id="fuel-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Машина</label>
+        <select class="form-select" name="vehicleId" required>${vehiclesOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Литров</label>
+        <input type="number" class="form-input" name="liters" value="${log?.liters || ''}" step="0.01" required oninput="calcFuelTotal()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Цена за литр (₽)</label>
+        <input type="number" class="form-input" name="pricePerLiter" value="${log?.pricePerLiter || ''}" step="0.01" oninput="calcFuelTotal()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Итого (₽)</label>
+        <input type="number" class="form-input" name="total" value="${log?.total || ''}" step="0.01" required oninput="calcFuelPrice()">
+      </div>
+      <div class="form-group">
+        <label class="form-label">АЗС / сеть</label>
+        <input type="text" class="form-input" name="station" value="${esc(log?.station || '')}" placeholder="Например: Роснефть, Лукойл, ATAN">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Место (город/трасса)</label>
+        <input type="text" class="form-input" name="location" value="${esc(log?.location || '')}" placeholder="Например: М-4, 340 км">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Источник оплаты</label>
+        <select class="form-select" name="source">${srcOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Способ</label>
+        <select class="form-select" name="method">${methodOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Рейс (опционально)</label>
+        <select class="form-select" name="tripId">${tripOpts}</select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дата</label>
+        <input type="date" class="form-input" name="date" value="${log?.date || today}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(log?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${log ? `<button class="btn btn-danger" onclick="deleteFuelLog('${log.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveFuelLog('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function calcFuelTotal() {
+  const f = document.getElementById('fuel-form');
+  const l = Number(f.liters.value);
+  const p = Number(f.pricePerLiter.value);
+  if (l > 0 && p > 0) f.total.value = (l * p).toFixed(2);
+}
+function calcFuelPrice() {
+  const f = document.getElementById('fuel-form');
+  const l = Number(f.liters.value);
+  const t = Number(f.total.value);
+  if (l > 0 && t > 0) f.pricePerLiter.value = (t / l).toFixed(2);
+}
+
+function saveFuelLog(id) {
+  const f = document.getElementById('fuel-form');
+  const data = {
+    vehicleId: f.vehicleId.value,
+    liters: Number(f.liters.value),
+    pricePerLiter: Number(f.pricePerLiter.value),
+    total: Number(f.total.value),
+    station: f.station.value.trim(),
+    location: f.location.value.trim(),
+    source: f.source.value,
+    method: f.method.value,
+    tripId: f.tripId.value || null,
+    date: f.date.value,
+    note: f.note.value.trim()
+  };
+  if (!data.liters || !data.total) { toast('Введите литры и сумму'); return; }
+  if (id) {
+    const i = state.fuelLogs.findIndex(x => x.id === id);
+    state.fuelLogs[i] = { ...state.fuelLogs[i], ...data };
+    toast('Заправка обновлена');
+  } else {
+    state.fuelLogs.push({ id: uid(), ...data });
+    toast('Заправка добавлена');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteFuelLog(id) {
+  if (!confirmDialog('Удалить запись о заправке?')) return;
+  state.fuelLogs = state.fuelLogs.filter(f => f.id !== id);
+  saveState(); closeModal(); render();
+}
+
+// ============ ЗАДАЧИ ============
+function renderTasks() {
+  document.getElementById('page-title').textContent = 'Задачи';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+
+  let list = [...state.tasks];
+  if (taskFilter === 'open') list = list.filter(t => !t.done);
+  if (taskFilter === 'done') list = list.filter(t => t.done);
+  list.sort((a, b) => {
+    if (a.done !== b.done) return a.done ? 1 : -1;
+    const da = a.due ? daysUntil(a.due) : 9999;
+    const db = b.due ? daysUntil(b.due) : 9999;
+    return da - db;
+  });
+
+  const openCount = state.tasks.filter(t => !t.done).length;
+  const overdueCount = state.tasks.filter(t => !t.done && t.due && daysUntil(t.due) < 0).length;
+
+  // Group by category
+  const groups = {};
+  list.forEach(t => {
+    const cat = t.category || 'Без категории';
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(t);
+  });
+
+  c.innerHTML = `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Активных</div>
+        <div class="summary-value">${openCount}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Просрочено</div>
+        <div class="summary-value ${overdueCount > 0 ? 'neg' : ''}">${overdueCount}</div>
+      </div>
+    </div>
+    <div class="chip-row">
+      <div class="chip ${taskFilter === 'open' ? 'active' : ''}" onclick="taskFilter='open'; render()">Открытые</div>
+      <div class="chip ${taskFilter === 'done' ? 'active' : ''}" onclick="taskFilter='done'; render()">Выполненные</div>
+      <div class="chip ${taskFilter === 'all' ? 'active' : ''}" onclick="taskFilter='all'; render()">Все</div>
+    </div>
+    ${Object.keys(groups).length === 0 ? `
+      <div class="empty">
+        <div class="empty-icon">✓</div>
+        <div class="empty-text">Задач нет</div>
+      </div>
+    ` : Object.entries(groups).map(([cat, tasks]) => `
+      <div class="section-title">${esc(cat)} (${tasks.length})</div>
+      ${tasks.map(t => renderTaskListItem(t)).join('')}
+    `).join('')}
+    <button class="fab" onclick="openTaskForm()">+</button>
+  `;
+}
+
+function renderTaskListItem(t) {
+  const days = t.due ? daysUntil(t.due) : null;
+  const dueBadge = t.due ? (
+    days < 0 ? `<span class="badge danger">Просрочено ${Math.abs(days)}д</span>` :
+    days === 0 ? `<span class="badge danger">Сегодня</span>` :
+    days === 1 ? `<span class="badge warn">Завтра</span>` :
+    days <= 7 ? `<span class="badge info">Через ${days}д</span>` :
+    `<span class="badge info">${fmtDateShort(t.due)}</span>`
+  ) : '';
+  const subDone = (t.subtasks || []).filter(s => s.done).length;
+  const subTotal = (t.subtasks || []).length;
+  return `
+    <div class="card" onclick="openTaskDetail('${t.id}')" style="${t.done ? 'opacity:0.55' : ''}">
+      <div class="row-flex">
+        <input type="checkbox" ${t.done ? 'checked' : ''} onclick="event.stopPropagation(); toggleTask('${t.id}')" style="width:18px;height:18px;accent-color:var(--primary)">
+        <div class="flex1">
+          <div class="card-title" style="font-size:14px;${t.done ? 'text-decoration:line-through' : ''}">
+            ${t.priority ? `<span class="priority-badge ${t.priority}">${t.priority === 'high' ? '!' : t.priority === 'mid' ? '·' : '↓'}</span>` : ''}
+            ${esc(t.title)}
+          </div>
+          <div class="card-sub" style="margin-top:4px">
+            ${dueBadge}
+            ${subTotal > 0 ? ` <span class="tag">${subDone}/${subTotal}</span>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleTask(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (t) { t.done = !t.done; saveState(); render(); }
+}
+
+function openTaskForm(id) {
+  const t = id ? state.tasks.find(x => x.id === id) : null;
+  openModal(t ? 'Задача' : 'Новая задача', `
+    <form id="task-form" onsubmit="return false">
+      <div class="form-group">
+        <label class="form-label">Название</label>
+        <input type="text" class="form-input" name="title" value="${esc(t?.title || '')}" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Категория</label>
+        <input type="text" class="form-input" name="category" value="${esc(t?.category || '')}" placeholder="Сделка, Ремонт, Лизинг, Топливо, Оптимизация...">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Приоритет</label>
+        <select class="form-select" name="priority">
+          <option value="high" ${t?.priority === 'high' ? 'selected' : ''}>Высокий</option>
+          <option value="mid" ${t?.priority === 'mid' || !t ? 'selected' : ''}>Средний</option>
+          <option value="low" ${t?.priority === 'low' ? 'selected' : ''}>Низкий</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Дедлайн (опционально)</label>
+        <input type="date" class="form-input" name="due" value="${t?.due || ''}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Заметка</label>
+        <textarea class="form-textarea" name="note">${esc(t?.note || '')}</textarea>
+      </div>
+    </form>
+  `, `
+    ${t ? `<button class="btn btn-danger" onclick="deleteTask('${t.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveTask('${id || ''}')">Сохранить</button>
+  `);
+}
+
+function saveTask(id) {
+  const f = document.getElementById('task-form');
+  const data = {
+    title: f.title.value.trim(),
+    category: f.category.value.trim(),
+    priority: f.priority.value,
+    due: f.due.value || null,
+    note: f.note.value.trim()
+  };
+  if (!data.title) { toast('Введите название'); return; }
+  if (id) {
+    const i = state.tasks.findIndex(x => x.id === id);
+    state.tasks[i] = { ...state.tasks[i], ...data };
+    toast('Задача обновлена');
+  } else {
+    state.tasks.push({ id: uid(), ...data, done: false, subtasks: [] });
+    toast('Задача добавлена');
+  }
+  saveState(); closeModal(); render();
+}
+function deleteTask(id) {
+  if (!confirmDialog('Удалить задачу?')) return;
+  state.tasks = state.tasks.filter(x => x.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function openTaskDetail(id) {
+  const t = state.tasks.find(x => x.id === id);
+  if (!t) return;
+  const days = t.due ? daysUntil(t.due) : null;
+  const dueLine = t.due ? (
+    days < 0 ? `<span class="badge danger">Просрочено на ${Math.abs(days)} дн.</span>` :
+    days === 0 ? `<span class="badge danger">Сегодня</span>` :
+    days === 1 ? `<span class="badge warn">Завтра</span>` :
+    `<span class="badge info">Через ${days} дн. (${fmtDate(t.due)})</span>`
+  ) : '<span class="tag">Без дедлайна</span>';
+
+  const body = `
+    <div class="card">
+      <div class="card-title" style="${t.done ? 'text-decoration:line-through;color:var(--text-3)' : ''}">
+        ${t.priority ? `<span class="priority-badge ${t.priority}">${t.priority === 'high' ? 'ВЫСОК.' : t.priority === 'mid' ? 'СРЕД.' : 'НИЗК.'}</span>` : ''}
+        ${esc(t.title)}
+      </div>
+      <div class="card-sub" style="margin-top:6px">
+        ${dueLine}
+        ${t.category ? ` <span class="tag">${esc(t.category)}</span>` : ''}
+      </div>
+      ${t.note ? `<div class="divider"></div><div class="card-sub" style="white-space:pre-wrap">${esc(t.note)}</div>` : ''}
+    </div>
+
+    <div class="section-title">Подзадачи (${(t.subtasks || []).filter(s => s.done).length}/${(t.subtasks || []).length})</div>
+    <div class="card">
+      ${(t.subtasks || []).map(s => `
+        <div class="subtask ${s.done ? 'done' : ''}">
+          <input type="checkbox" ${s.done ? 'checked' : ''} onchange="toggleSubtask('${id}', '${s.id}')">
+          <span class="subtask-text flex1">${esc(s.text)}</span>
+          <button class="icon-btn" onclick="deleteSubtask('${id}', '${s.id}')">✕</button>
+        </div>
+      `).join('')}
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <input type="text" id="new-sub" class="form-input" placeholder="Новая подзадача" style="flex:1;padding:8px 10px;font-size:13px">
+        <button class="btn btn-secondary" style="width:auto;padding:8px 14px;font-size:13px" onclick="addSubtask('${id}')">+</button>
+      </div>
+    </div>
+
+    <button class="btn ${t.done ? 'btn-secondary' : 'btn-primary'}" style="margin-top:12px" onclick="toggleTask('${id}'); closeModal()">
+      ${t.done ? 'Вернуть в работу' : 'Отметить выполненной'}
+    </button>
+  `;
+  openModal('Задача', body, `<button class="btn btn-secondary" onclick="openTaskForm('${id}')">Редактировать</button>`);
+}
+
+function toggleSubtask(taskId, subId) {
+  const t = state.tasks.find(x => x.id === taskId);
+  const s = t?.subtasks?.find(x => x.id === subId);
+  if (s) { s.done = !s.done; saveState(); openTaskDetail(taskId); }
+}
+function deleteSubtask(taskId, subId) {
+  const t = state.tasks.find(x => x.id === taskId);
+  if (t) { t.subtasks = t.subtasks.filter(x => x.id !== subId); saveState(); openTaskDetail(taskId); }
+}
+function addSubtask(taskId) {
+  const input = document.getElementById('new-sub');
+  const text = input.value.trim();
+  if (!text) return;
+  const t = state.tasks.find(x => x.id === taskId);
+  if (!t.subtasks) t.subtasks = [];
+  t.subtasks.push({ id: uid(), text, done: false });
+  saveState();
+  openTaskDetail(taskId);
+}
+
+// ============ КАЛЕНДАРЬ ============
+function renderCalendar() {
+  document.getElementById('page-title').textContent = 'Календарь';
+  document.getElementById('header-actions').innerHTML = `
+    <button class="header-btn" onclick="calMonth(-1)">‹</button>
+    <button class="header-btn" onclick="calMonth(1)" style="margin-left:6px">›</button>
+  `;
+  const c = document.getElementById('content');
+  const year = calendarMonth.getFullYear();
+  const month = calendarMonth.getMonth();
+  const monthName = calendarMonth.toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+  const firstDay = new Date(year, month, 1);
+  const startOffset = (firstDay.getDay() + 6) % 7;
+  const start = new Date(year, month, 1 - startOffset);
+  const days = [];
+  for (let i = 0; i < 42; i++) {
+    const d = new Date(start); d.setDate(start.getDate() + i);
+    days.push(d);
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const isoDay = d => d.toISOString().slice(0, 10);
+  function eventsForDay(d) {
+    const iso = isoDay(d);
+    const events = [];
+    state.trips.forEach(t => {
+      if (t.loadDate === iso) events.push({ type: 'trip', text: `▷ №${t.number} загрузка`, id: t.id });
+      if (t.departureDate === iso) events.push({ type: 'trip', text: `→ №${t.number} выезд`, id: t.id });
+      if (t.arrivalDate === iso) events.push({ type: 'trip', text: `↓ №${t.number} прибытие`, id: t.id });
+      if (t.returnDate === iso) events.push({ type: 'trip', text: `← №${t.number} возврат`, id: t.id });
+    });
+    state.tasks.filter(t => !t.done && t.due === iso).forEach(t => {
+      events.push({ type: 'task', text: `✓ ${t.title}`, id: t.id });
+    });
+    return events;
+  }
+  c.innerHTML = `
+    <div class="card" style="text-align:center;font-weight:600;text-transform:capitalize">${monthName}</div>
+    <div class="cal-grid">
+      ${['Пн','Вт','Ср','Чт','Пт','Сб','Вс'].map(d => `<div class="cal-day-h">${d}</div>`).join('')}
+      ${days.map(d => {
+        const events = eventsForDay(d);
+        const isToday = d.getTime() === today.getTime();
+        const isOther = d.getMonth() !== month;
+        return `
+          <div class="cal-day ${isOther ? 'other-month' : ''} ${isToday ? 'today' : ''}" onclick="showDayEvents('${isoDay(d)}')">
+            <div class="cal-day-num">${d.getDate()}</div>
+            ${events.slice(0, 3).map(e => `<div class="cal-marker ${e.type}">${esc(e.text)}</div>`).join('')}
+            ${events.length > 3 ? `<div class="cal-marker" style="background:#eee;color:#666">+${events.length - 3}</div>` : ''}
+          </div>
+        `;
+      }).join('')}
+    </div>
+    <div class="section-title">Ближайшие события</div>
+    ${(() => {
+      const upcoming = [];
+      state.trips.forEach(t => {
+        ['loadDate', 'departureDate', 'arrivalDate', 'returnDate'].forEach(k => {
+          if (t[k] && new Date(t[k]) >= today) {
+            const labels = { loadDate: 'Загрузка', departureDate: 'Выезд', arrivalDate: 'Прибытие', returnDate: 'Возврат' };
+            upcoming.push({ date: t[k], title: `${labels[k]} — Рейс №${t.number}`, type: 'trip', id: t.id });
+          }
+        });
+      });
+      state.tasks.filter(t => !t.done && t.due && new Date(t.due) >= today).forEach(t => {
+        upcoming.push({ date: t.due, title: t.title, type: 'task', id: t.id });
+      });
+      upcoming.sort((a,b) => a.date.localeCompare(b.date));
+      if (upcoming.length === 0) return '<div class="empty" style="padding:20px"><div class="empty-text">Нет ближайших событий</div></div>';
+      return upcoming.slice(0, 10).map(e => `
+        <div class="card" onclick="${e.type === 'trip' ? `openTripDetail('${e.id}')` : `openTaskDetail('${e.id}')`}">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(e.title)}</div>
+              <div class="card-sub">${fmtDate(e.date)}</div>
+            </div>
+            <span class="badge ${e.type === 'trip' ? 'warn' : 'info'}">${e.type === 'trip' ? 'Рейс' : 'Задача'}</span>
+          </div>
+        </div>
+      `).join('');
+    })()}
+  `;
+}
+function calMonth(delta) { calendarMonth.setMonth(calendarMonth.getMonth() + delta); render(); }
+function showDayEvents(iso) {
+  const events = [];
+  state.trips.forEach(t => {
+    if (t.loadDate === iso) events.push({ type: 'trip', text: `Загрузка — Рейс №${t.number}`, id: t.id });
+    if (t.departureDate === iso) events.push({ type: 'trip', text: `Выезд — Рейс №${t.number}`, id: t.id });
+    if (t.arrivalDate === iso) events.push({ type: 'trip', text: `Прибытие — Рейс №${t.number}`, id: t.id });
+    if (t.returnDate === iso) events.push({ type: 'trip', text: `Возврат — Рейс №${t.number}`, id: t.id });
+  });
+  state.tasks.filter(t => t.due === iso).forEach(t => {
+    events.push({ type: 'task', text: t.title, id: t.id, done: t.done });
+  });
+  if (events.length === 0) { toast('На этот день событий нет'); return; }
+  openModal(fmtDate(iso),
+    events.map(e => `
+      <div class="card" onclick="closeModal(); setTimeout(() => ${e.type === 'trip' ? `openTripDetail('${e.id}')` : `openTaskDetail('${e.id}')`}, 250)">
+        <div class="row-flex">
+          <span class="badge ${e.type === 'trip' ? 'warn' : 'info'}">${e.type === 'trip' ? 'Рейс' : 'Задача'}</span>
+          <span class="flex1">${esc(e.text)}${e.done ? ' <s style="color:#999">выполнено</s>' : ''}</span>
+        </div>
+      </div>
+    `).join('')
+  );
+}
+
+// ============ НАСТРОЙКИ + ОТЧЁТЫ ============
+function renderSettings() {
+  document.getElementById('page-title').textContent = 'Ещё';
+  document.getElementById('header-actions').innerHTML = '';
+  const c = document.getElementById('content');
+  c.innerHTML = `
+    <div class="section-title">Отчёты</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="openReportBuilder()">
+        <span class="settings-label">📊 Отчёт для бухгалтерии (Excel)</span>
+        <span class="settings-value">›</span>
+      </div>
+      <div class="settings-item" onclick="generatePdfSummary()">
+        <span class="settings-label">📄 PDF-сводка за месяц</span>
+        <span class="settings-value">›</span>
+      </div>
+      <div class="settings-item" onclick="openSellerReport()">
+        <span class="settings-label">🤝 Расходы Продавца (для Транша 5)</span>
+        <span class="settings-value">${fmtMoney(getTotalSeller())} ›</span>
+      </div>
+    </div>
+
+    <div class="section-title">Справочники</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="showVehicles()">
+        <span class="settings-label">Транспорт</span>
+        <span class="settings-value">${state.vehicles.length} шт. ›</span>
+      </div>
+      <div class="settings-item" onclick="showDrivers()">
+        <span class="settings-label">Водители</span>
+        <span class="settings-value">${state.drivers.length} чел. ›</span>
+      </div>
+      <div class="settings-item" onclick="showFreightPlatforms()">
+        <span class="settings-label">Площадки грузов (ATI и др.)</span>
+        <span class="settings-value">${state.freightPlatforms.filter(p => p.active).length} акт. ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('paymentSources', 'Источники оплаты')">
+        <span class="settings-label">Источники оплаты</span>
+        <span class="settings-value">${state.paymentSources.length} ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('expenseCategories', 'Категории OPEX')">
+        <span class="settings-label">Категории OPEX</span>
+        <span class="settings-value">${state.expenseCategories.length} ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('capexCategories', 'Категории CAPEX')">
+        <span class="settings-label">Категории CAPEX</span>
+        <span class="settings-value">${state.capexCategories.length} ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('sellerCategories', 'Категории расходов Продавца')">
+        <span class="settings-label">Категории расходов Продавца</span>
+        <span class="settings-value">${state.sellerCategories.length} ›</span>
+      </div>
+      <div class="settings-item" onclick="showListEditor('paidByOptions', 'Кем оплачено')">
+        <span class="settings-label">Кем оплачено</span>
+        <span class="settings-value">${state.paidByOptions.length} ›</span>
+      </div>
+    </div>
+
+    <div class="section-title">Резервное копирование</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="exportJSON()">
+        <span class="settings-label">Экспорт JSON (полный бэкап)</span>
+        <span class="settings-value">↓</span>
+      </div>
+      <div class="settings-item" onclick="document.getElementById('import-file').click()">
+        <span class="settings-label">Импорт JSON</span>
+        <span class="settings-value">↑</span>
+      </div>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
+    </div>
+
+    <div class="section-title">Статистика</div>
+    <div class="card">
+      <div class="mini-stat"><span class="mini-stat-label">Рейсов</span><span class="mini-stat-value">${state.trips.length}</span></div>
+      <div class="mini-stat"><span class="mini-stat-label">Расходов OPEX</span><span class="mini-stat-value">${getOpexExpenses().length}</span></div>
+      <div class="mini-stat"><span class="mini-stat-label">Расходов CAPEX</span><span class="mini-stat-value">${getCapexExpenses().length}</span></div>
+      <div class="mini-stat"><span class="mini-stat-label">Расходов Продавца</span><span class="mini-stat-value">${getSellerExpenses().length}</span></div>
+      <div class="mini-stat"><span class="mini-stat-label">Заправок</span><span class="mini-stat-value">${state.fuelLogs.length}</span></div>
+      <div class="mini-stat"><span class="mini-stat-label">Задач (открыто/всего)</span><span class="mini-stat-value">${state.tasks.filter(t=>!t.done).length}/${state.tasks.length}</span></div>
+    </div>
+
+    <div class="section-title" style="color:var(--danger)">Опасная зона</div>
+    <div class="settings-group">
+      <div class="settings-item" onclick="clearAllData()">
+        <span class="settings-label" style="color:var(--danger)">Удалить все данные</span>
+        <span class="settings-value">✕</span>
+      </div>
+    </div>
+    <div style="text-align:center;color:var(--text-3);font-size:11px;padding:20px 10px">
+      Метида · v2.0<br>Обновления через GitHub — просто обновите страницу
+    </div>
+  `;
+}
+
+// ---------- SHOW VEHICLES / DRIVERS / PLATFORMS ----------
+function showVehicles() {
+  const body = state.vehicles.map(v => `
+    <div class="card" onclick="editVehicle('${v.id}')">
+      <div class="card-title">${esc(v.name)}</div>
+      <div class="card-sub">
+        Гос. номер: ${esc(v.reg)}${v.normFuel ? ' · Норма: ' + v.normFuel + ' л/100км' : ''}<br>
+        ${v.driver ? 'Водитель: ' + esc(state.drivers.find(d => d.id === v.driver)?.name || '') + '<br>' : ''}
+        ${v.telemetryId ? '<span class="badge success">GPS: ' + esc(v.telemetryId) + '</span> ' : ''}
+        ${v.active ? '<span class="badge success">Активна</span>' : '<span class="badge">Неактивна</span>'}
+      </div>
+    </div>
+  `).join('');
+  openModal('Транспорт', body + '<button class="btn btn-secondary" style="margin-top:10px" onclick="editVehicle()">+ Добавить машину</button>');
+}
+function editVehicle(id) {
+  const v = id ? state.vehicles.find(x => x.id === id) : null;
+  const driverOpts = ['<option value="">— не назначен —</option>', ...state.drivers.map(d => `<option value="${d.id}" ${v?.driver === d.id ? 'selected' : ''}>${esc(d.name)}</option>`)].join('');
+  openModal(v ? 'Машина' : 'Новая машина', `
+    <form id="veh-form" onsubmit="return false">
+      <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-input" name="name" value="${esc(v?.name || '')}" required></div>
+      <div class="form-group"><label class="form-label">Тип</label><select class="form-select" name="type">
+        <option value="truck" ${v?.type === 'truck' ? 'selected' : ''}>Тягач</option>
+        <option value="trailer" ${v?.type === 'trailer' ? 'selected' : ''}>Полуприцеп</option>
+        <option value="van" ${v?.type === 'van' ? 'selected' : ''}>Газель/фургон</option>
+        <option value="other" ${v?.type === 'other' ? 'selected' : ''}>Другое</option>
+      </select></div>
+      <div class="form-group"><label class="form-label">Гос. номер</label><input type="text" class="form-input" name="reg" value="${esc(v?.reg || '')}"></div>
+      <div class="form-group"><label class="form-label">VIN</label><input type="text" class="form-input" name="vin" value="${esc(v?.vin || '')}"></div>
+      <div class="form-group"><label class="form-label">СТС</label><input type="text" class="form-input" name="sts" value="${esc(v?.sts || '')}"></div>
+      <div class="form-group"><label class="form-label">Год</label><input type="text" class="form-input" name="year" value="${esc(v?.year || '')}"></div>
+      <div class="form-group"><label class="form-label">Норма расхода, л/100км</label><input type="number" class="form-input" name="normFuel" value="${v?.normFuel || 0}" step="0.1"><div class="form-hint">Для сравнения с фактическим расходом</div></div>
+      <div class="form-group"><label class="form-label">Водитель по умолчанию</label><select class="form-select" name="driver">${driverOpts}</select></div>
+      <div class="form-group"><label class="form-label">ID в системе мониторинга (Wialon и др.)</label><input type="text" class="form-input" name="telemetryId" value="${esc(v?.telemetryId || '')}" placeholder="Заполните после установки GPS"><div class="form-hint">Для последующей интеграции с телематикой</div></div>
+      <div class="form-group"><label class="form-label">Заметка</label><textarea class="form-textarea" name="note">${esc(v?.note || '')}</textarea></div>
+      <div class="form-group"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" name="active" ${!v || v.active ? 'checked' : ''}><span>Активна</span></label></div>
+    </form>
+  `, `
+    ${v ? `<button class="btn btn-danger" onclick="deleteVehicle('${v.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveVehicle('${id || ''}')">Сохранить</button>
+  `);
+}
+function saveVehicle(id) {
+  const f = document.getElementById('veh-form');
+  const data = {
+    name: f.name.value.trim(), type: f.type.value, reg: f.reg.value.trim(),
+    vin: f.vin.value.trim(), sts: f.sts.value.trim(), year: f.year.value.trim(),
+    normFuel: Number(f.normFuel.value) || 0,
+    driver: f.driver.value || null, telemetryId: f.telemetryId.value.trim(),
+    note: f.note.value.trim(), active: f.active.checked
+  };
+  if (!data.name) { toast('Введите название'); return; }
+  if (id) {
+    const i = state.vehicles.findIndex(v => v.id === id);
+    state.vehicles[i] = { ...state.vehicles[i], ...data };
+  } else state.vehicles.push({ id: uid(), ...data });
+  saveState(); closeModal(); toast('Сохранено'); render();
+}
+function deleteVehicle(id) {
+  if (!confirmDialog('Удалить машину?')) return;
+  state.vehicles = state.vehicles.filter(v => v.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function showDrivers() {
+  const body = state.drivers.map(d => `
+    <div class="card" onclick="editDriver('${d.id}')">
+      <div class="card-title">${esc(d.name)}</div>
+      ${d.phone ? `<div class="card-sub">${esc(d.phone)}</div>` : ''}
+      ${d.note ? `<div class="card-sub">${esc(d.note)}</div>` : ''}
+    </div>
+  `).join('');
+  openModal('Водители', body + '<button class="btn btn-secondary" style="margin-top:10px" onclick="editDriver()">+ Добавить</button>');
+}
+function editDriver(id) {
+  const d = id ? state.drivers.find(x => x.id === id) : null;
+  openModal(d ? 'Водитель' : 'Новый водитель', `
+    <form id="drv-form" onsubmit="return false">
+      <div class="form-group"><label class="form-label">ФИО</label><input type="text" class="form-input" name="name" value="${esc(d?.name || '')}" required></div>
+      <div class="form-group"><label class="form-label">Телефон</label><input type="tel" class="form-input" name="phone" value="${esc(d?.phone || '')}"></div>
+      <div class="form-group"><label class="form-label">Заметка</label><textarea class="form-textarea" name="note">${esc(d?.note || '')}</textarea></div>
+    </form>
+  `, `
+    ${d ? `<button class="btn btn-danger" onclick="deleteDriver('${d.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="saveDriver('${id || ''}')">Сохранить</button>
+  `);
+}
+function saveDriver(id) {
+  const f = document.getElementById('drv-form');
+  const data = { name: f.name.value.trim(), phone: f.phone.value.trim(), note: f.note.value.trim() };
+  if (!data.name) { toast('Введите ФИО'); return; }
+  if (id) {
+    const i = state.drivers.findIndex(d => d.id === id);
+    state.drivers[i] = { ...state.drivers[i], ...data };
+  } else state.drivers.push({ id: uid(), ...data });
+  saveState(); closeModal(); toast('Сохранено'); render();
+}
+function deleteDriver(id) {
+  if (!confirmDialog('Удалить водителя?')) return;
+  state.drivers = state.drivers.filter(d => d.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function showFreightPlatforms() {
+  // Statistics per platform
+  const stats = {};
+  state.freightPlatforms.forEach(p => {
+    const platformTrips = state.trips.filter(t => t.platformBackId === p.id);
+    const totalBack = platformTrips.reduce((s, t) => s + Number(t.rateBack || 0), 0);
+    const avgRate = platformTrips.length > 0 ? totalBack / platformTrips.length : 0;
+    stats[p.id] = { count: platformTrips.length, avgRate };
+  });
+
+  const body = `
+    <div class="info-block">Отметьте площадки, которыми пользуетесь. При добавлении обратной загрузки можно выбрать источник — потом видно, где ставки выше.</div>
+    ${state.freightPlatforms.map(p => `
+      <div class="card" onclick="editPlatform('${p.id}')">
+        <div class="row-flex">
+          <div class="flex1">
+            <div class="card-title" style="font-size:14px">${esc(p.name)} ${p.active ? '<span class="badge success">Используется</span>' : ''}</div>
+            <div class="card-sub">${esc(p.note || '')}</div>
+            ${stats[p.id].count > 0 ? `<div class="card-sub" style="margin-top:4px"><b>Рейсов:</b> ${stats[p.id].count} · <b>Средняя обратная ставка:</b> ${fmtMoney(stats[p.id].avgRate)}</div>` : ''}
+            ${p.url ? `<a href="${esc(p.url)}" target="_blank" style="font-size:12px;color:var(--primary);text-decoration:none" onclick="event.stopPropagation()">→ ${esc(p.url)}</a>` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('')}
+    <button class="btn btn-secondary" style="margin-top:10px" onclick="editPlatform()">+ Добавить площадку</button>
+  `;
+  openModal('Площадки грузов', body);
+}
+function editPlatform(id) {
+  const p = id ? state.freightPlatforms.find(x => x.id === id) : null;
+  openModal(p ? 'Площадка' : 'Новая площадка', `
+    <form id="plat-form" onsubmit="return false">
+      <div class="form-group"><label class="form-label">Название</label><input type="text" class="form-input" name="name" value="${esc(p?.name || '')}" required></div>
+      <div class="form-group"><label class="form-label">URL</label><input type="url" class="form-input" name="url" value="${esc(p?.url || '')}" placeholder="https://"></div>
+      <div class="form-group"><label class="form-label">Заметка</label><textarea class="form-textarea" name="note">${esc(p?.note || '')}</textarea></div>
+      <div class="form-group"><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" name="active" ${!p || p.active ? 'checked' : ''}><span>Используется</span></label></div>
+    </form>
+  `, `
+    ${p ? `<button class="btn btn-danger" onclick="deletePlatform('${p.id}')">Удалить</button>` : ''}
+    <button class="btn btn-primary" onclick="savePlatform('${id || ''}')">Сохранить</button>
+  `);
+}
+function savePlatform(id) {
+  const f = document.getElementById('plat-form');
+  const data = { name: f.name.value.trim(), url: f.url.value.trim(), note: f.note.value.trim(), active: f.active.checked };
+  if (!data.name) { toast('Введите название'); return; }
+  if (id) {
+    const i = state.freightPlatforms.findIndex(p => p.id === id);
+    state.freightPlatforms[i] = { ...state.freightPlatforms[i], ...data };
+  } else state.freightPlatforms.push({ id: uid(), ...data });
+  saveState(); closeModal(); toast('Сохранено'); render();
+}
+function deletePlatform(id) {
+  if (!confirmDialog('Удалить площадку?')) return;
+  state.freightPlatforms = state.freightPlatforms.filter(p => p.id !== id);
+  saveState(); closeModal(); render();
+}
+
+function showListEditor(key, title) {
+  const list = state[key];
+  const body = `
+    <div id="list-editor">
+      ${list.map((item, idx) => `
+        <div class="card" style="padding:10px 12px">
+          <div class="row-flex">
+            <span class="flex1">${esc(item)}</span>
+            <button class="icon-btn" onclick="removeListItem('${key}', ${idx})">✕</button>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="display:flex;gap:6px;margin-top:12px">
+      <input type="text" id="new-list-item" class="form-input" placeholder="Новый пункт" style="flex:1">
+      <button class="btn btn-secondary" style="width:auto;padding:10px 16px" onclick="addListItem('${key}')">+</button>
+    </div>
+  `;
+  openModal(title, body);
+}
+function addListItem(key) {
+  const input = document.getElementById('new-list-item');
+  const val = input.value.trim();
+  if (!val) return;
+  state[key].push(val);
+  saveState();
+  showListEditor(key, document.querySelector('.modal-title').textContent);
+}
+function removeListItem(key, idx) {
+  if (!confirmDialog('Удалить пункт?')) return;
+  state[key].splice(idx, 1);
+  saveState();
+  showListEditor(key, document.querySelector('.modal-title').textContent);
+}
+
+// ============ ОТЧЁТЫ ============
+function openReportBuilder() {
+  const today = new Date();
+  const firstOfMonth = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().slice(0,10);
+  const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+  const firstOfLast = lastMonth.toISOString().slice(0,10);
+  const lastOfLast = new Date(today.getFullYear(), today.getMonth(), 0).toISOString().slice(0,10);
+  openModal('Отчёт для бухгалтерии', `
+    <div class="info-block">Excel-файл с несколькими листами: сводка, расходы, рейсы, топливо, сводка по источникам оплаты и расходам Продавца.</div>
+    <div class="form-group">
+      <label class="form-label">Период</label>
+      <select class="form-select" id="rp-period" onchange="rpChangePeriod()">
+        <option value="current">Текущий месяц</option>
+        <option value="prev">Прошлый месяц</option>
+        <option value="all">За всё время</option>
+        <option value="custom">Произвольный период</option>
+      </select>
+    </div>
+    <div class="form-group" id="rp-dates" style="display:none">
+      <label class="form-label">С — По</label>
+      <div style="display:flex;gap:8px">
+        <input type="date" class="form-input" id="rp-from" value="${firstOfMonth}">
+        <input type="date" class="form-input" id="rp-to" value="${today.toISOString().slice(0,10)}">
+      </div>
+    </div>
+    <input type="hidden" id="rp-first-current" value="${firstOfMonth}">
+    <input type="hidden" id="rp-first-last" value="${firstOfLast}">
+    <input type="hidden" id="rp-last-last" value="${lastOfLast}">
+  `, `
+    <button class="btn btn-primary" onclick="generateExcelReport()">Скачать Excel</button>
+  `);
+}
+
+function rpChangePeriod() {
+  const p = document.getElementById('rp-period').value;
+  document.getElementById('rp-dates').style.display = p === 'custom' ? '' : 'none';
+}
+
+function getReportPeriod() {
+  const p = document.getElementById('rp-period').value;
+  const today = new Date(); today.setHours(23,59,59,999);
+  if (p === 'current') return { from: new Date(document.getElementById('rp-first-current').value), to: today, label: 'Текущий месяц' };
+  if (p === 'prev') {
+    const from = new Date(document.getElementById('rp-first-last').value);
+    const to = new Date(document.getElementById('rp-last-last').value); to.setHours(23,59,59,999);
+    return { from, to, label: 'Прошлый месяц' };
+  }
+  if (p === 'all') return { from: null, to: null, label: 'За всё время' };
+  const from = new Date(document.getElementById('rp-from').value);
+  const to = new Date(document.getElementById('rp-to').value); to.setHours(23,59,59,999);
+  return { from, to, label: 'Произвольный период' };
+}
+
+function generateExcelReport() {
+  try {
+    const { from, to, label } = getReportPeriod();
+    const inRange = (iso) => {
+      if (!iso) return false;
+      const d = new Date(iso);
+      if (from && d < from) return false;
+      if (to && d > to) return false;
+      return true;
+    };
+
+    const wb = XLSX.utils.book_new();
+
+    // === Лист 1: Сводка ===
+    const trips = state.trips.filter(t => inRange(t.departureDate || t.loadDate));
+    const opexInPeriod = getOpexExpenses().filter(e => inRange(e.date));
+    const capexInPeriod = getCapexExpenses().filter(e => inRange(e.date));
+    const sellerInPeriod = getSellerExpenses().filter(e => inRange(e.date));
+    const fuelInPeriod = state.fuelLogs.filter(f => inRange(f.date));
+
+    const revenue = trips.reduce((s, t) => s + Number(t.rateTo || 0) + Number(t.rateBack || 0), 0);
+    const totalOpex = opexInPeriod.reduce((s, e) => s + Number(e.amount || 0), 0);
+    const totalCapex = capexInPeriod.reduce((s, e) => s + Number(e.amount || 0), 0);
+    const totalSeller = sellerInPeriod.reduce((s, e) => s + Number(e.amount || 0), 0);
+
+    const summaryData = [
+      ['ОТЧЁТ — ООО «МЕТИДА»'],
+      ['Период', label],
+      ['Дата формирования', new Date().toLocaleDateString('ru-RU')],
+      [],
+      ['ОПЕРАЦИОННАЯ ДЕЯТЕЛЬНОСТЬ'],
+      ['Выручка от рейсов', revenue],
+      ['Операционные расходы (OPEX)', totalOpex],
+      ['Операционная прибыль', revenue - totalOpex],
+      [],
+      ['ИНВЕСТИЦИИ (CAPEX)'],
+      ['Капитальные вложения за период', totalCapex],
+      [],
+      ['РАСХОДЫ ПРОДАВЦА (для расчёта Транша 5)'],
+      ['Расходы Продавца по обязательствам п. 3.1-3.2', totalSeller],
+      [],
+      ['ТОПЛИВО'],
+      ['Литров', fuelInPeriod.reduce((s, f) => s + Number(f.liters || 0), 0)],
+      ['Стоимость', fuelInPeriod.reduce((s, f) => s + Number(f.total || 0), 0)],
+      [],
+      ['КОЛИЧЕСТВО'],
+      ['Рейсов', trips.length],
+      ['Расходов OPEX', opexInPeriod.length],
+      ['Расходов CAPEX', capexInPeriod.length],
+      ['Заправок', fuelInPeriod.length],
+    ];
+    const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+    wsSummary['!cols'] = [{ wch: 45 }, { wch: 20 }];
+    XLSX.utils.book_append_sheet(wb, wsSummary, 'Сводка');
+
+    // === Лист 2: Расходы OPEX ===
+    const opexRows = [['Дата', 'Сумма', 'Категория', 'Источник', 'Способ', 'Кем оплачено', 'Рейс', 'Заметка']];
+    opexInPeriod.sort((a,b) => (a.date || '').localeCompare(b.date || '')).forEach(e => {
+      const trip = e.tripId ? state.trips.find(t => t.id === e.tripId) : null;
+      opexRows.push([
+        e.date, Number(e.amount || 0), e.category, e.source,
+        e.method || '', e.paidBy || '', trip ? `Рейс №${trip.number}` : '', e.note || ''
+      ]);
+    });
+    opexRows.push([]);
+    opexRows.push(['ИТОГО', totalOpex]);
+    const wsOpex = XLSX.utils.aoa_to_sheet(opexRows);
+    wsOpex['!cols'] = [{wch:12},{wch:12},{wch:22},{wch:20},{wch:12},{wch:20},{wch:15},{wch:30}];
+    XLSX.utils.book_append_sheet(wb, wsOpex, 'Расходы OPEX');
+
+    // === Лист 3: Расходы CAPEX ===
+    if (capexInPeriod.length > 0) {
+      const capexRows = [['Дата', 'Сумма', 'Категория', 'Источник', 'Способ', 'Кем оплачено', 'Заметка']];
+      capexInPeriod.sort((a,b) => (a.date || '').localeCompare(b.date || '')).forEach(e => {
+        capexRows.push([e.date, Number(e.amount || 0), e.category, e.source, e.method || '', e.paidBy || '', e.note || '']);
+      });
+      capexRows.push([]);
+      capexRows.push(['ИТОГО', totalCapex]);
+      const wsCapex = XLSX.utils.aoa_to_sheet(capexRows);
+      wsCapex['!cols'] = [{wch:12},{wch:12},{wch:25},{wch:20},{wch:12},{wch:20},{wch:30}];
+      XLSX.utils.book_append_sheet(wb, wsCapex, 'CAPEX');
+    }
+
+    // === Лист 4: Расходы Продавца ===
+    if (sellerInPeriod.length > 0) {
+      const sellerRows = [['Дата', 'Сумма', 'Категория', 'Источник', 'Способ', 'Заметка']];
+      sellerInPeriod.sort((a,b) => (a.date || '').localeCompare(b.date || '')).forEach(e => {
+        sellerRows.push([e.date, Number(e.amount || 0), e.category, e.source, e.method || '', e.note || '']);
+      });
+      sellerRows.push([]);
+      sellerRows.push(['ИТОГО (для расчёта Транша 5)', totalSeller]);
+      const wsSeller = XLSX.utils.aoa_to_sheet(sellerRows);
+      wsSeller['!cols'] = [{wch:12},{wch:12},{wch:25},{wch:20},{wch:12},{wch:30}];
+      XLSX.utils.book_append_sheet(wb, wsSeller, 'Расходы Продавца');
+    }
+
+    // === Лист 5: Рейсы ===
+    const tripsRows = [['№', 'Загрузка', 'Выезд', 'Прибытие', 'Возврат', 'Маршрут туда', 'Груз туда', 'Ставка туда', 'Маршрут обратно', 'Груз обратно', 'Ставка обратно', 'Общая выручка', 'Расходы OPEX', 'Прибыль', 'Пробег, км', 'Машина', 'Водитель', 'Источник обратки', 'Статус', 'Заметка']];
+    trips.sort((a,b) => (a.departureDate || '').localeCompare(b.departureDate || '')).forEach(t => {
+      const v = state.vehicles.find(x => x.id === t.vehicleId);
+      const d = state.drivers.find(x => x.id === t.driverId);
+      const platform = t.platformBackId ? state.freightPlatforms.find(p => p.id === t.platformBackId) : null;
+      const tripExp = state.expenses.filter(e => e.tripId === t.id && e.type === 'opex').reduce((s, e) => s + Number(e.amount || 0), 0);
+      const rev = Number(t.rateTo || 0) + Number(t.rateBack || 0);
+      const statusMap = { planned: 'Запланирован', in_progress: 'В пути', completed: 'Завершён' };
+      tripsRows.push([
+        t.number, t.loadDate || '', t.departureDate || '', t.arrivalDate || '', t.returnDate || '',
+        t.routeTo || '', t.cargoTo || '', Number(t.rateTo || 0),
+        t.routeBack || '', t.cargoBack || '', Number(t.rateBack || 0),
+        rev, tripExp, rev - tripExp, Number(t.mileage || 0),
+        v ? v.name + ' ' + v.reg : '', d ? d.name : '',
+        platform ? platform.name : '', statusMap[t.status] || t.status, t.note || ''
+      ]);
+    });
+    const wsTrips = XLSX.utils.aoa_to_sheet(tripsRows);
+    wsTrips['!cols'] = [{wch:5},{wch:12},{wch:12},{wch:12},{wch:12},{wch:30},{wch:20},{wch:12},{wch:30},{wch:20},{wch:12},{wch:14},{wch:14},{wch:14},{wch:11},{wch:25},{wch:20},{wch:15},{wch:12},{wch:30}];
+    XLSX.utils.book_append_sheet(wb, wsTrips, 'Рейсы');
+
+    // === Лист 6: Топливо ===
+    if (fuelInPeriod.length > 0) {
+      const fuelRows = [['Дата', 'Машина', 'Литров', '₽/литр', 'Итого', 'АЗС', 'Место', 'Источник оплаты', 'Способ', 'Рейс', 'Заметка']];
+      fuelInPeriod.sort((a,b) => (a.date || '').localeCompare(b.date || '')).forEach(f => {
+        const v = state.vehicles.find(x => x.id === f.vehicleId);
+        const trip = f.tripId ? state.trips.find(t => t.id === f.tripId) : null;
+        fuelRows.push([
+          f.date, v ? v.reg : '', Number(f.liters || 0), Number(f.pricePerLiter || 0),
+          Number(f.total || 0), f.station || '', f.location || '',
+          f.source || '', f.method || '', trip ? 'Рейс №' + trip.number : '', f.note || ''
+        ]);
+      });
+      const wsFuel = XLSX.utils.aoa_to_sheet(fuelRows);
+      wsFuel['!cols'] = [{wch:12},{wch:12},{wch:9},{wch:8},{wch:12},{wch:15},{wch:20},{wch:20},{wch:12},{wch:12},{wch:25}];
+      XLSX.utils.book_append_sheet(wb, wsFuel, 'Топливо');
+    }
+
+    // === Лист 7: По источникам оплаты ===
+    const bySrc = {};
+    [...opexInPeriod, ...capexInPeriod, ...sellerInPeriod].forEach(e => {
+      if (!bySrc[e.source]) bySrc[e.source] = { opex: 0, capex: 0, seller: 0 };
+      bySrc[e.source][e.type] = (bySrc[e.source][e.type] || 0) + Number(e.amount || 0);
+    });
+    const srcRows = [['Источник оплаты', 'OPEX', 'CAPEX', 'Расходы Продавца', 'Итого']];
+    Object.entries(bySrc).forEach(([src, data]) => {
+      srcRows.push([src, data.opex, data.capex, data.seller, data.opex + data.capex + data.seller]);
+    });
+    srcRows.push([]);
+    srcRows.push(['ИТОГО', totalOpex, totalCapex, totalSeller, totalOpex + totalCapex + totalSeller]);
+    const wsSrc = XLSX.utils.aoa_to_sheet(srcRows);
+    wsSrc['!cols'] = [{wch:32},{wch:14},{wch:14},{wch:18},{wch:14}];
+    XLSX.utils.book_append_sheet(wb, wsSrc, 'По источникам оплаты');
+
+    // Save
+    const periodStr = label.replace(/\s+/g, '_');
+    const dateStr = new Date().toISOString().slice(0,10);
+    XLSX.writeFile(wb, `Metida_отчёт_${periodStr}_${dateStr}.xlsx`);
+    closeModal();
+    toast('Excel-отчёт сформирован');
+  } catch (e) {
+    console.error(e);
+    toast('Ошибка формирования: ' + e.message);
+  }
+}
+
+function generatePdfSummary() {
+  try {
+    const { jsPDF } = window.jspdf;
+    const monthStart = getMonthStart();
+    const revenue = getMonthRevenue();
+    const opex = getMonthOpex();
+    const capex = getTotalCapex();
+    const seller = getTotalSeller();
+    const activeTrips = state.trips.filter(t => t.status === 'in_progress').length;
+    const monthTrips = state.trips.filter(t => t.departureDate && new Date(t.departureDate) >= monthStart);
+    const monthName = new Date().toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' });
+
+    const doc = new jsPDF();
+    // NOTE: default fonts do not support Cyrillic; using transliteration for reliability
+    doc.setFontSize(18);
+    doc.text('METIDA - month summary', 14, 20);
+    doc.setFontSize(11);
+    doc.setTextColor(100);
+    doc.text('Period: ' + monthName, 14, 28);
+    doc.text('Generated: ' + new Date().toLocaleDateString('ru-RU'), 14, 34);
+
+    doc.setTextColor(0);
+    doc.autoTable({
+      startY: 42,
+      head: [['Operational activity', 'Amount, RUB']],
+      body: [
+        ['Revenue', new Intl.NumberFormat('ru-RU').format(Math.round(revenue))],
+        ['OPEX', new Intl.NumberFormat('ru-RU').format(Math.round(opex))],
+        ['Operating profit', new Intl.NumberFormat('ru-RU').format(Math.round(revenue - opex))],
+      ],
+      theme: 'grid',
+      headStyles: { fillColor: [31, 78, 92] }
+    });
+
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 8,
+      head: [['Investments (all time)', 'Amount, RUB']],
+      body: [
+        ['CAPEX total', new Intl.NumberFormat('ru-RU').format(Math.round(capex))],
+        ['Seller expenses (for Tranche 5)', new Intl.NumberFormat('ru-RU').format(Math.round(seller))],
+      ],
+      theme: 'grid',
+      headStyles: { fillColor: [106, 27, 154] }
+    });
+
+    doc.autoTable({
+      startY: doc.lastAutoTable.finalY + 8,
+      head: [['Operational metrics', 'Value']],
+      body: [
+        ['Trips this month', String(monthTrips.length)],
+        ['Active trips now', String(activeTrips)],
+        ['Open tasks', String(state.tasks.filter(t => !t.done).length)],
+      ],
+      theme: 'grid',
+      headStyles: { fillColor: [58, 125, 110] }
+    });
+
+    doc.setFontSize(9);
+    doc.setTextColor(150);
+    doc.text('Note: font limited to latin. For full Russian report use Excel export.', 14, 285);
+
+    doc.save(`Metida_summary_${new Date().toISOString().slice(0,10)}.pdf`);
+    toast('PDF-сводка сохранена');
+  } catch (e) {
+    console.error(e);
+    toast('Ошибка PDF: ' + e.message);
+  }
+}
+
+function openSellerReport() {
+  const sellerExp = getSellerExpenses().sort((a,b) => (b.date || '').localeCompare(a.date || ''));
+  const total = sellerExp.reduce((s, e) => s + Number(e.amount || 0), 0);
+  const tranche5 = Math.max(0, 500000 - total);
+
+  openModal('Расходы Продавца → Транш 5', `
+    <div class="summary-grid">
+      <div class="summary-card">
+        <div class="summary-label">Расходы Продавца всего</div>
+        <div class="summary-value seller">${fmtMoney(total)}</div>
+      </div>
+      <div class="summary-card">
+        <div class="summary-label">Расчётный Транш 5</div>
+        <div class="summary-value ${tranche5 > 0 ? 'pos' : 'neg'}">${fmtMoney(tranche5)}</div>
+      </div>
+    </div>
+    <div class="info-block">
+      <b>Формула по п. 2.4 Соглашения:</b><br>
+      Транш 5 = 500 000 − Расходы Продавца<br>
+      ${total >= 500000 ? '⚠ Расходы превысили 500 тыс. — Транш 5 не выплачивается. Превышение продавец покрывает сам.' : ''}
+    </div>
+    ${sellerExp.length === 0 ? '<div class="empty" style="padding:20px"><div class="empty-text">Расходов Продавца пока нет</div></div>' :
+      sellerExp.map(e => `
+        <div class="card" onclick="closeModal(); setTimeout(() => openExpenseForm('${e.id}'), 250)">
+          <div class="row-flex">
+            <div class="flex1">
+              <div class="card-title" style="font-size:14px">${esc(e.category)}</div>
+              <div class="card-sub">${fmtDateShort(e.date)} · ${esc(e.source)}${e.note ? ' · ' + esc(e.note.slice(0, 50)) : ''}</div>
+            </div>
+            <div class="amount seller">${fmtMoney(e.amount)}</div>
+          </div>
+        </div>
+      `).join('')
+    }
+    <button class="btn btn-secondary" style="margin-top:12px" onclick="closeModal(); setTimeout(() => { const f = document.createElement('form'); openExpenseForm(); setTimeout(() => { document.querySelector('[name=type]').value = 'seller'; reloadExpenseCategories('seller'); }, 100); }, 250)">+ Добавить расход Продавца</button>
+  `);
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `metida_backup_${new Date().toISOString().slice(0,10)}.json`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Бэкап скачан');
+}
+function importJSON(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  if (!confirmDialog('Импорт заменит все текущие данные. Продолжить?')) { ev.target.value = ''; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      state = JSON.parse(e.target.result);
+      saveState();
+      toast('Данные импортированы');
+      render();
+    } catch (err) { toast('Ошибка импорта: ' + err.message); }
+  };
+  reader.readAsText(file);
+  ev.target.value = '';
+}
+function clearAllData() {
+  if (!confirmDialog('УДАЛИТЬ ВСЕ ДАННЫЕ БЕЗ ВОССТАНОВЛЕНИЯ?')) return;
+  if (!confirmDialog('Точно? Убедитесь, что сделали бэкап.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(OLD_KEY);
+  loadState();
+  render();
+  toast('Все данные удалены');
+}
+
+// ============ ROUTER ============
+function render() {
+  switch (currentTab) {
+    case 'dashboard': renderDashboard(); break;
+    case 'trips': renderTrips(); break;
+    case 'calendar': renderCalendar(); break;
+    case 'expenses': renderExpenses(); break;
+    case 'fuel': renderFuel(); break;
+    case 'tasks': renderTasks(); break;
+    case 'settings': renderSettings(); break;
+  }
+}
+
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentTab = tab.dataset.tab;
+    document.getElementById('content').scrollTop = 0;
+    render();
+  });
+});
+
+loadState();
+render();
+
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    self.addEventListener('install', e => self.skipWaiting());
+    self.addEventListener('activate', e => self.clients.claim());
+    self.addEventListener('fetch', e => {
+      if (e.request.url.startsWith(self.location.origin)) {
+        e.respondWith(fetch(e.request).catch(() => new Response('Offline', {status: 200})));
+      }
+    });
+  `;
+  try {
+    const swBlob = new Blob([swCode], { type: 'application/javascript' });
+    const swURL = URL.createObjectURL(swBlob);
+    navigator.serviceWorker.register(swURL).catch(() => {});
+  } catch (e) {}
+}
+
+</script>
+
+
+<g-ext-in></g-ext-in></body></html>
